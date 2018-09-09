@@ -14,7 +14,7 @@ class words {
 
 	
 
-	void Sort(ofstream &out) {
+	void SortOut(ofstream &out) {
 		
 		while (WordsList.begin() != WordsList.end()) {
 			map<string, int>::iterator Cur = WordsList.begin();
@@ -110,7 +110,7 @@ public:
 		}
 
 		//put wors and their frequense in descending order to the csv file 
-		Sort(out);
+		SortOut(out);
 
 		in.close();
 		out.close();
