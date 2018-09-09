@@ -69,6 +69,8 @@ class words {
 			arg.erase(arg.find('.'));
 		if (arg[0] == '-')
 			arg.erase(arg.find('-'));
+		if (arg[0] == '—')
+			arg.erase(arg.find('—'));
 		if (arg[0] == '(')
 			arg.erase(arg.begin());
 		if ((arg.size()>0) && (arg[arg.size() - 1] == ')')) {
