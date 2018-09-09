@@ -13,9 +13,9 @@ class words {
 	map <string, int> WordsList;
 
 	
-	void SortOut() {
+	void SortOut(string OutFile) {
 		ofstream out;
-		out.open("output.csv");
+		out.open(OutFile);
 		if (!out.is_open())
 			return;
 
@@ -80,7 +80,7 @@ class words {
 	}
 
 public:
-	int CountWords(string InputFile) {
+	int CountWords(string InputFile, string OutFile) {
 
 		//open input file and check whether it opened
 		ifstream in;
@@ -102,7 +102,7 @@ public:
 		}
 
 		//put wors and their frequense in descending order to the csv file 
-		SortOut();
+		SortOut(OutFile);
 		in.close();
 		return 0;
 		
@@ -111,8 +111,9 @@ public:
 };
 
 int main() {
-	string InputFile;
-	getline(cin, InputFile);
+	string InputFile, OutFile;
+	getline(cin, InputFile, ' ');
+	getline(cin, OutFile);
 	words st;
-	st.CountWords(InputFile);
+	st.CountWords(InputFile, OutFile);
 }
