@@ -56,30 +56,29 @@ class words {
 	string CleanString(string arg) {
 		setlocale(LC_ALL, "Russian");
 		transform(arg.begin(), arg.end(), arg.begin(), tolower);
-		if ((arg.size()>0) && (arg[arg.size() - 1] == '\n'))
-			arg.erase(arg.find('\n'));
-		if ((arg.size()>0) && (arg[arg.size() - 1] == '!'))
-			arg.erase(arg.find('!'));
-		if ((arg.size()>0) && (arg[arg.size() - 1] == '?'))
-			arg.erase(arg.find('?'));
-		if ((arg.size()>0) && (arg[arg.size() - 1] == ','))
-			arg.erase(arg.find(','));
-		if ((arg.size()>0) && (arg[arg.size() - 1] == ';'))
-			arg.erase(arg.find(';'));
-		if ((arg.size()>0) && (arg[arg.size() - 1] == ':'))
-			arg.erase(arg.find(':'));
-		if ((arg.size()>0) && (arg[arg.size() - 1] == '.'))
-			arg.erase(arg.find('.'));
-		if (arg[0] == '-')
-			arg.erase(arg.find('-'));
-		if (arg[0] == '—')
-			arg.erase(arg.find('—'));
-		if (arg[0] == '(')
-			arg.erase(arg.begin());
-		if ((arg.size()>0) && (arg[arg.size() - 1] == ')')) {
-			arg.erase(arg.find(')'));
+		if (arg.size() > 0) {
+			if (arg[arg.size() - 1] == '\n')
+				arg.erase(arg.find('\n'));
+			if (arg[arg.size() - 1] == '!')
+				arg.erase(arg.find('!'));
+			if (arg[arg.size() - 1] == '?')
+				arg.erase(arg.find('?'));
+			if (arg[arg.size() - 1] == ',')
+				arg.erase(arg.find(','));
+			if (arg[arg.size() - 1] == ';')
+				arg.erase(arg.find(';'));
+			if (arg[arg.size() - 1] == ':')
+				arg.erase(arg.find(':'));
+			if (arg[arg.size() - 1] == '.')
+				arg.erase(arg.find('.'));
+			if (arg[0] == '—')
+				arg.erase(arg.find('—'));
+			if (arg[0] == '(')
+				arg.erase(arg.begin());
+			if (arg[arg.size() - 1] == ')') {
+				arg.erase(arg.find(')'));
+			}
 		}
-		
 		return arg;
 	}
 
