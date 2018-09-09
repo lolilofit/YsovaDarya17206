@@ -1,1 +1,1 @@
-h h Gh! h gh j ghj ghj ghj
+Member types iterator and const_iterator are random access iterator types (pointing to a character and to a const character, respectively).

@@ -13,16 +13,26 @@ class words {
 	map <string, int> WordsList;
 
 	string CleanString(string arg) {
-		int size = arg.size();
 
-		if (arg[size - 1] == '!')
+		if ((arg.size()>0) && (arg[arg.size() - 1] == '\n'))
+			arg.erase(arg.find('\n'));
+		if ((arg.size()>0) && (arg[arg.size() - 1] == '!'))
 			arg.erase(arg.find('!'));
-		if (arg[size - 1] == '?')
+		if ((arg.size()>0) && (arg[arg.size() - 1] == '?'))
 			arg.erase(arg.find('?'));
-		if (arg[size - 1] == ',')
+		if ((arg.size()>0) && (arg[arg.size() - 1] == ',')) 
 			arg.erase(arg.find(','));
-		if (arg[size - 1] == '.')
+		if ((arg.size()>0) && (arg[arg.size() - 1] == ';'))
+			arg.erase(arg.find(';'));
+		if ((arg.size()>0)&&(arg[arg.size() - 1] == '.'))
 			arg.erase(arg.find('.'));
+		if (arg[0] == '-') 
+			arg.erase(arg.find('-'));		
+		if (arg[0] == '(') 
+			arg.erase(arg.begin());
+		if ((arg.size()>0)&&(arg[arg.size()-1] == ')')) {
+			arg.erase(arg.find(')'));
+					}
 		transform(arg.begin(), arg.end(), arg.begin(), tolower);
 
 		return arg;
@@ -82,13 +92,12 @@ public:
 			string arg;
 			//get one word
 			getline(in, arg, ' ');
-			if ((arg[0] != '\n') && (arg.size() != 0)) {
-				//translate all symbols from the word to small register
-				//and delete all punctuation marks
-				arg = CleanString(arg);
+			//translate all symbols from the word to small register
+			//and delete all punctuation marks
+			arg = CleanString(arg);
+			if ((arg[0] != '\n') && (arg.size() != 0)) 
 				//create a map with words and their frequency
 				MakeMap(arg);
-			}
 		}
 
 		//put wors and their frequense in descending order to the csv file 
