@@ -12,32 +12,7 @@ class words {
 	int count;
 	map <string, int> WordsList;
 
-	string CleanString(string arg) {
-
-		if ((arg.size()>0) && (arg[arg.size() - 1] == '\n'))
-			arg.erase(arg.find('\n'));
-		if ((arg.size()>0) && (arg[arg.size() - 1] == '!'))
-			arg.erase(arg.find('!'));
-		if ((arg.size()>0) && (arg[arg.size() - 1] == '?'))
-			arg.erase(arg.find('?'));
-		if ((arg.size()>0) && (arg[arg.size() - 1] == ',')) 
-			arg.erase(arg.find(','));
-		if ((arg.size()>0) && (arg[arg.size() - 1] == ';'))
-			arg.erase(arg.find(';'));
-		if ((arg.size()>0)&&(arg[arg.size() - 1] == '.'))
-			arg.erase(arg.find('.'));
-		if (arg[0] == '-') 
-			arg.erase(arg.find('-'));		
-		if (arg[0] == '(') 
-			arg.erase(arg.begin());
-		if ((arg.size()>0)&&(arg[arg.size()-1] == ')')) {
-			arg.erase(arg.find(')'));
-					}
-		transform(arg.begin(), arg.end(), arg.begin(), tolower);
-
-		return arg;
-	}
-
+	
 	void SortOut() {
 		ofstream out;
 		out.open("output.csv");
@@ -76,6 +51,32 @@ class words {
 
 		count++;
 		return;
+	}
+
+	string CleanString(string arg) {
+
+		if ((arg.size()>0) && (arg[arg.size() - 1] == '\n'))
+			arg.erase(arg.find('\n'));
+		if ((arg.size()>0) && (arg[arg.size() - 1] == '!'))
+			arg.erase(arg.find('!'));
+		if ((arg.size()>0) && (arg[arg.size() - 1] == '?'))
+			arg.erase(arg.find('?'));
+		if ((arg.size()>0) && (arg[arg.size() - 1] == ','))
+			arg.erase(arg.find(','));
+		if ((arg.size()>0) && (arg[arg.size() - 1] == ';'))
+			arg.erase(arg.find(';'));
+		if ((arg.size()>0) && (arg[arg.size() - 1] == '.'))
+			arg.erase(arg.find('.'));
+		if (arg[0] == '-')
+			arg.erase(arg.find('-'));
+		if (arg[0] == '(')
+			arg.erase(arg.begin());
+		if ((arg.size()>0) && (arg[arg.size() - 1] == ')')) {
+			arg.erase(arg.find(')'));
+		}
+		transform(arg.begin(), arg.end(), arg.begin(), tolower);
+
+		return arg;
 	}
 
 public:
