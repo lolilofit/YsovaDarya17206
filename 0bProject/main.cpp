@@ -81,7 +81,6 @@ class words {
 
 public:
 	int CountWords(string InputFile, string OutFile) {
-
 		//open input file and check whether it opened
 		ifstream in;
 		in.open(InputFile);
@@ -116,4 +115,5 @@ int main() {
 	getline(cin, OutFile);
 	words st;
 	st.CountWords(InputFile, OutFile);
+	return 0;
 }
