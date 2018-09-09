@@ -54,7 +54,8 @@ class words {
 	}
 
 	string CleanString(string arg) {
-
+		setlocale(LC_ALL, "Russian");
+		transform(arg.begin(), arg.end(), arg.begin(), tolower);
 		if ((arg.size()>0) && (arg[arg.size() - 1] == '\n'))
 			arg.erase(arg.find('\n'));
 		if ((arg.size()>0) && (arg[arg.size() - 1] == '!'))
@@ -76,8 +77,7 @@ class words {
 		if ((arg.size()>0) && (arg[arg.size() - 1] == ')')) {
 			arg.erase(arg.find(')'));
 		}
-		transform(arg.begin(), arg.end(), arg.begin(), tolower);
-
+		
 		return arg;
 	}
 
