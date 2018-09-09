@@ -83,9 +83,11 @@ class words {
 		return arg;
 	}
 
+
+
 public:
 	int CountWords(string InputFile, string OutFile) {
-		//open input file and check whether it opened
+		//open input file and check whether it opened 
 		ifstream in;
 		in.open(InputFile);
 	    ofstream out;
