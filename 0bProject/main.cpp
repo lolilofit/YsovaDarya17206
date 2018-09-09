@@ -13,12 +13,9 @@ class words {
 	map <string, int> WordsList;
 
 	
-	void SortOut(string OutFile) {
-		ofstream out;
-		out.open(OutFile);
-		if (!out.is_open())
-			return;
 
+	void Sort(ofstream &out) {
+		
 		while (WordsList.begin() != WordsList.end()) {
 			map<string, int>::iterator Cur = WordsList.begin();
 			map<string, int>::iterator ToErase = WordsList.begin();
@@ -37,7 +34,6 @@ class words {
 			//delete an element of a map with maximum frecuency
 			WordsList.erase(ToErase);
 		}
-		out.close();
 		return;
 	}
 
@@ -53,9 +49,14 @@ class words {
 		return;
 	}
 
-	string CleanString(string arg) {
+	string ToLower(string arg) {
 		setlocale(LC_ALL, "Russian");
 		transform(arg.begin(), arg.end(), arg.begin(), tolower);
+		return arg;
+	}
+
+	string CleanString(string arg) {
+		
 		if (arg.size() > 0) {
 			if (arg[arg.size() - 1] == '\n')
 				arg.erase(arg.find('\n'));
@@ -87,7 +88,9 @@ public:
 		//open input file and check whether it opened
 		ifstream in;
 		in.open(InputFile);
-		if (!in.is_open())
+	    ofstream out;
+		out.open(OutFile);
+		if (!out.is_open()||!in.is_open())
 			return 0;
 
 		count = 0;
@@ -97,6 +100,7 @@ public:
 			getline(in, arg, ' ');
 			//translate all symbols from the word to small register
 			//and delete all punctuation marks
+			arg = ToLower(arg);
 			arg = CleanString(arg);
 			if ((arg[0] != '\n') && (arg.size() != 0)) 
 				//create a map with words and their frequency
@@ -104,8 +108,10 @@ public:
 		}
 
 		//put wors and their frequense in descending order to the csv file 
-		SortOut(OutFile);
+		Sort(out);
+
 		in.close();
+		out.close();
 		return 0;
 		
 	}
