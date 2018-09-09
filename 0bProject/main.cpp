@@ -4,6 +4,7 @@
 #include<map>
 #include<vector>
 #include<algorithm>
+#include <iomanip>
 
 using namespace std;
 
@@ -28,9 +29,9 @@ class words {
 				Cur++;
 			}
 
-			float persent = (100/count)*ToErase->second;
+			double persent = (100.000*ToErase->second)/count;
 			//put a word and his frequence in a file
-			out << ToErase->first << " " << ToErase->second << " " <<persent<< "%"<<'\n';
+			out << ToErase->first << " " << ToErase->second << " " <<fixed<<setprecision(3) <<persent<< "%"<<endl;
 			//delete an element of a map with maximum frecuency
 			WordsList.erase(ToErase);
 		}
@@ -86,7 +87,8 @@ class words {
 
 
 public:
-	int CountWords(string InputFile, string OutFile) {
+	int CountWords(string InputFile, string OutFile) { 
+		
 		//open input file and check whether it opened 
 		ifstream in;
 		in.open(InputFile);
