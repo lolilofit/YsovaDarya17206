@@ -5,36 +5,26 @@
 #include<vector>
 #include<algorithm>
 #include <iomanip>
+#include"clean.h"
 
 using namespace std;
 
 class words {
 
-	int count;
+	int count = 0;
 	map <string, int> WordsList;
-
-	
-
+    
 	void SortOut(ofstream &out) {
-		
-		while (WordsList.begin() != WordsList.end()) {
-			map<string, int>::iterator Cur = WordsList.begin();
-			map<string, int>::iterator ToErase = WordsList.begin();
-			
-			//while map isn't empty
-			while (Cur!= WordsList.end()) {
-				//find element of a map with maximum frequency
-				if (ToErase->second < Cur->second) 
-					ToErase = Cur;
-				Cur++;
-			}
 
-			double persent = (100.000*ToErase->second)/count;
-			//put a word and his frequence in a file
-			out << ToErase->first << " " << ToErase->second << " " <<fixed<<setprecision(3) <<persent<< "%"<<endl;
-			//delete an element of a map with maximum frecuency
-			WordsList.erase(ToErase);
+		multimap<int, string> SortMap;
+		//make sorted map
+		for (auto cur = WordsList.begin(); cur != WordsList.end(); ++cur)
+			SortMap.insert(SortMap.end(), make_pair(cur->second, cur->first));
+		for (auto cur = SortMap.rbegin(); cur != SortMap.rend(); ++cur) {
+			double persent = (100.000*cur->first) / count;
+			out << cur->second << " " << cur->first << " " << fixed << setprecision(3) << persent << "%" << endl;
 		}
+
 		return;
 	}
 
@@ -49,84 +39,62 @@ class words {
 		count++;
 		return;
 	}
-
-	string ToLower(string arg) {
-		setlocale(LC_ALL, "Russian");
-		transform(arg.begin(), arg.end(), arg.begin(), tolower);
-		return arg;
-	}
-
-	string CleanString(string arg) {
-		
-		if (arg.size() > 0) {
-			if (arg[arg.size() - 1] == '\n')
-				arg.erase(arg.find('\n'));
-			if (arg[arg.size() - 1] == '!')
-				arg.erase(arg.find('!'));
-			if (arg[arg.size() - 1] == '?')
-				arg.erase(arg.find('?'));
-			if (arg[arg.size() - 1] == ',')
-				arg.erase(arg.find(','));
-			if (arg[arg.size() - 1] == ';')
-				arg.erase(arg.find(';'));
-			if (arg[arg.size() - 1] == ':')
-				arg.erase(arg.find(':'));
-			if (arg[arg.size() - 1] == '.')
-				arg.erase(arg.find('.'));
-			if (arg[0] == '—')
-				arg.erase(arg.find('—'));
-			if (arg[0] == '(')
-				arg.erase(arg.begin());
-			if (arg[arg.size() - 1] == ')') {
-				arg.erase(arg.find(')'));
-			}
-		}
-		return arg;
-	}
-
-
-
 public:
-	int CountWords(string InputFile, string OutFile) { 
+	int CountWords(ifstream &in, ofstream &out) {
 		
-		//open input file and check whether it opened 
-		ifstream in;
-		in.open(InputFile);
-	    ofstream out;
-		out.open(OutFile);
-		if (!out.is_open()||!in.is_open())
-			return 0;
-
-		count = 0;
 		while (!in.eof()) {
 			string arg;
 			//get one word
 			getline(in, arg, ' ');
 			//translate all symbols from the word to small register
 			//and delete all punctuation marks
-			arg = ToLower(arg);
-			arg = CleanString(arg);
-			if ((arg[0] != '\n') && (arg.size() != 0)) 
+			arg = cleanstring::ToLower(arg);
+			arg = cleanstring::CleanString(arg);
+			if ((arg[0] != '\n') && (arg.size() != 0))
 				//create a map with words and their frequency
 				MakeMap(arg);
 		}
 
 		//put wors and their frequense in descending order to the csv file 
 		SortOut(out);
-
-		in.close();
-		out.close();
 		return 0;
-		
+
 	}
-	
+
 };
 
-int main() {
-	string InputFile, OutFile;
-	getline(cin, InputFile, ' ');
-	getline(cin, OutFile);
-	words st;
-	st.CountWords(InputFile, OutFile);
+void OpenIn(const string InputFile, ifstream &in) {
+	
+	in.open(InputFile);
+	if (!in.is_open()) 
+		cerr << "no such file";
+	return;
+}
+
+void OpenOut(const string OutFile, ofstream &out) {
+	out.open(OutFile);
+	if (!out.is_open()) 
+		cerr << "no such file";
+	return;
+}
+
+int main(int argc, const char *argv[]) {
+	ifstream in;
+	ofstream out;
+	if (argc == 3) {
+		OpenIn(argv[1], in);
+		//in.open(argv[1]);
+	    OpenOut(argv[2], out);
+		//out.open(argv[2]);
+	}
+	else {
+		cout << "wrong number of arguments";
+		return 0;
+	}
+	
+	words st;	
+    st.CountWords(in, out);
+	in.close();
+	out.close();
 	return 0;
 }
