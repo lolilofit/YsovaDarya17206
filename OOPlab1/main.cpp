@@ -38,9 +38,9 @@ using namespace std;
 
 class TritArr
 {
+	int count = 0;
 public:
 	vector <unsigned int> arr;
-	int count = 0;
 
 public:
 	TritArr(int length) {
@@ -57,6 +57,17 @@ public:
 	}
 
 	 void shrink(int val) {
+		 for (int i = this->arr.capacity(); i > count; i--) {
+			 if (this->arr[i] > 0) {
+				 for (int j = 3; j >= 0; j--) {
+					 if (this->read(i * 4 + j) == (1 || 2)) {
+						 this->arr.resize(4 * i + j);
+						 return;
+					 }
+			     }
+		     }
+		 }
+		 this->arr.resize(count);
 	 }
 
 	int read(int pos) {
@@ -69,9 +80,9 @@ public:
 	void SetTrit(int pos, Trit val) {
 		if (this->arr.capacity() < pos) {
 			if (val == Trit::Unknown)
-			return;
+			 return;
 			if (val == Trit::True) {
-				this->arr.resize(pos / 4); //заполняет 0??
+				this->arr.resize(pos / 4); 
 				this->arr[pos / 4] = this->arr[pos / 4] & 1;
 			}
 		}
@@ -102,7 +113,40 @@ TritArr operator&(TritArr &first, TritArr &second) {
 		}
 	return res_arr;
 	}
+ 
+TritArr operator|(TritArr &first, TritArr &second) {
+	int minimum = min(first.arr.capacity(), second.arr.capacity());
+	TritArr res_arr(minimum);
 
+	for (int i = 0; i < minimum; i++) {
+		for (int j = 0; j < 4; j++) {
+			int first_trit = first.read(i * 4 + j);
+			int	second_trit = second.read(i * 4 + j);
+
+			Trit new_tritf = static_cast <Trit> (first_trit);
+			Trit new_trits = static_cast <Trit> (second_trit);
+			Trit res_trit = new_tritf | new_trits;
+
+			res_arr.SetTrit(i * 4 + j, res_trit);
+		}
+	}
+	return res_arr;
+}
+
+TritArr operator~(TritArr &first) {
+
+	TritArr res_arr(first.arr.capacity());
+	for (int i = 0; i < first.arr.capacity(); i++) {
+		for (int j = 0; j < 4; j++) {
+			int first_trit = first.read(i * 4 + j);
+			
+			Trit new_tritf = static_cast <Trit> (first_trit);
+			Trit res_trit = ~new_tritf;
+			res_arr.SetTrit(i * 4 + j, res_trit);
+		}
+	}
+	return res_arr;
+}
 
 int main() {
 	TritArr ar1(3);
