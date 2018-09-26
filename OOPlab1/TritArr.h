@@ -6,6 +6,7 @@
 
 class TritArr
 {
+	const int size_t = (sizeof(unsigned int)) * 4;
 	int count = 0;
 public:
 	std::vector <unsigned int> arr;
@@ -17,7 +18,7 @@ public:
 		int value = -1;
 
 		Equal(int position, int val);
-		//~Equal();
+
 		TritArr& operator=(const Trit &val);
 	};
 	
@@ -31,6 +32,8 @@ public:
 	int LastUnknown();
 
 	int cardinality(Trit val);
+	
+	int capacity();
 
 	void Shrink();
 
