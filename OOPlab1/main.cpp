@@ -27,23 +27,6 @@ return count_f_t;
 }
 
 
-
-
-
 int main() {
-	
-	TritArr ar1(3);
-	//TritArr ar2(2);
-	ar1.arr[0] = 3;
-	ar1.arr[1] = 3;
-	ar1.arr[2] = 2;
-
-
-	//ar2.arr[1] = 0;
-	//ar2.arr[0] = 1;
-	//ar1[15] = Trit::False;
-	ar1.SetTrit(15, static_cast<Trit>(1));
-	unordered_map<Trit, int, hash<int>> trit_map;
-	
 	return 0;
 }

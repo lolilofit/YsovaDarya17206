@@ -65,7 +65,7 @@ void TritArr::Shrink() {
 	this->arr.resize(count);
 }
 
-int TritArr::read(int pos) {
+int TritArr::read(int pos) const{
 	if (this->arr.capacity() * size_t < pos)
 		return 0;
 	unsigned int point = this->arr[pos / size_t];
@@ -95,17 +95,20 @@ TritArr::Equal TritArr::operator[](int pos) {
 	return pack;
 }
 
+TritArr::Equal::operator Trit() const {
+	return static_cast<Trit> (this->p->read(pos));
+}
 
 TritArr& TritArr::Equal::operator=(const Trit &val) {
 	p->SetTrit(pos, val);
 	return *p;
 }
 
-bool operator==(TritArr trit_arr, Trit val) {
+bool operator==(TritArr::Equal trit_equal, Trit val) {
 	bool res = 0;
-	if (static_cast<int>(val) == trit_arr.arr[trit_arr.arr.capacity() - 1])
+	TritArr trit_arr = *trit_equal.p;
+	if (static_cast<int>(val) == trit_arr.read(trit_equal.pos))
 		res = 1;
-	trit_arr.arr.erase(trit_arr.arr.begin() + trit_arr.arr.capacity() - 2, trit_arr.arr.end());
 	return res;
 }
 
