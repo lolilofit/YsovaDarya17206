@@ -23,23 +23,24 @@ void  TritArr::Trim(int last_index) {
 }
 
 int TritArr::capacity() {
-	return this->arr.size();
+	int res= this->arr.size();
+	return size_t*res;
 }
 
 int TritArr::LastUnknown() {
-	for (int i = this->arr.capacity(); i > 0; i--) {
+	for (int i = this->arr.size() - 1; i >= 0; i--) {
 		for (int j = size_t-1; j >= 0; j--) {
 			if (this->read(i * size_t + j) > 0)
 				return size_t * i + j + 1;
 		}
 	}
-	return -1;
+	return 0;
 }
 
 int TritArr::cardinality(Trit val) {
 	int count_val = 0;
 	if (static_cast<int> (val) != 0) {
-		for (int i = this->arr.capacity(); i > 0; i--) {
+		for (int i = this->arr.size(); i > 0; i--) {
 			for (int j = size_t-1; j >= 0; j--) {
 				if (this->read(i * size_t + j) == static_cast<int> (val))
 					count_val++;
@@ -47,12 +48,12 @@ int TritArr::cardinality(Trit val) {
 		}
 	}
 	else
-		count_val = this->arr.capacity() - this->LastUnknown();
+		count_val = this->arr.size() - this->LastUnknown();
 	return count_val;
 }
 
 void TritArr::Shrink() {
-	for (int i = this->arr.capacity(); i > count; i--) {
+	for (int i = this->arr.size(); i > count; i--) {
 		if (this->arr[i] > 0) {
 			for (int j = size_t-1; j >= 0; j--) {
 				if (this->read(i * size_t + j) == 1 || this->read(i * size_t + j) == 2) {
@@ -66,18 +67,18 @@ void TritArr::Shrink() {
 }
 
 int TritArr::read(int pos) const{
-	if (this->arr.capacity() * size_t < pos)
+	if (this->arr.size() * size_t - 1 < pos)
 		return 0;
 	unsigned int point = this->arr[pos / size_t];
 	return static_cast<int> (((point >> (2*size_t - 2 - 2 * (pos % size_t))) & 1) + 2 * (1 & (point >> (2*size_t - 1 - 2 * (pos % size_t)))));
 }
 
 void TritArr::SetTrit(int pos, Trit val) {
-	if (this->arr.capacity() * size_t < pos) {
+	if (this->arr.size() * size_t - 1 < pos) {
 		if (val == Trit::Unknown)
 			return;
 		if (val == Trit::True) {
-			this->arr.resize(pos / size_t);
+			this->arr.resize(pos / size_t );
 			this->arr[pos / size_t] = this->arr[pos / size_t] & 1;
 		}
 	}
