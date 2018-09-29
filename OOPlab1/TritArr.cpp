@@ -10,6 +10,7 @@ TritArr::TritArr(int length) {
 	for (int i = 0; i < length; i++)
 		arr.push_back(0);
 	count = length;
+	maxlen = length;
 }
 
 TritArr::~TritArr() {
@@ -20,11 +21,11 @@ TritArr::Equal::Equal(int position, int val) { pos = position; value = val; }
 
 void  TritArr::Trim(int last_index) {
 	this->arr.resize(last_index);
+	maxlen = last_index;
 }
 
 int TritArr::capacity() {
-	int res= this->arr.size();
-	return size_t*res;
+	return this->maxlen;
 }
 
 int TritArr::LastUnknown() {
@@ -57,7 +58,8 @@ void TritArr::Shrink() {
 		if (this->arr[i] > 0) {
 			for (int j = size_t-1; j >= 0; j--) {
 				if (this->read(i * size_t + j) == 1 || this->read(i * size_t + j) == 2) {
-					this->arr.resize(size_t * i + j);
+					this->arr.resize(size_t * i + j + 1);
+					maxlen = size_t * i + j;
 					return;
 				}
 			}
@@ -79,6 +81,7 @@ void TritArr::SetTrit(int pos, Trit val) {
 			return;
 		if (val == Trit::True) {
 			this->arr.resize(pos / size_t );
+			maxlen = pos / size_t;
 			this->arr[pos / size_t] = this->arr[pos / size_t] & 1;
 		}
 	}

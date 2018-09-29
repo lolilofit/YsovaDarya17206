@@ -8,7 +8,7 @@ class TritArr
 {
 	const int size_t = (sizeof(unsigned int)) * 4;
 	int count = 0;
-	
+	int maxlen;
  public:
 	 std::vector <unsigned int> arr;
 
