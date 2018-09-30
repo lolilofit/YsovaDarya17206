@@ -26,6 +26,7 @@ class TritArr
 	};
 	
 public:
+	
 	TritArr(int length);
 
 	~TritArr();
