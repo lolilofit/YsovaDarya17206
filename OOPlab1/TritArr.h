@@ -3,12 +3,18 @@
 #include"OneTrit.h"
 #include<iostream>
 #include<vector>
+#include<unordered_map>
 
 class TritArr
 {
-	const int size_t = (sizeof(unsigned int)) * 4;
+	//const int size_t = (sizeof(unsigned int) * 4);
 	int count = 0;
 	int maxlen;
+
+	int rest(int pos);
+
+	void _resize(int index);
+
  public:
 	 std::vector <unsigned int> arr;
 
@@ -26,18 +32,20 @@ class TritArr
 	};
 	
 public:
-	
+
+	std::unordered_map< Trit, int, std::hash<int> > cardinality();
+
 	TritArr(int length);
 
 	~TritArr();
 
 	void Trim(int last_index);
 
-	int LastUnknown();
+	size_t LastUnknown();
 
-	int cardinality(Trit val);
+	size_t cardinality(Trit val);
 	
-	int capacity();
+	size_t capacity();
 
 	void Shrink();
 
@@ -47,7 +55,6 @@ public:
 
 	TritArr::Equal operator[](int pos);
 
-	//Trit operator[](const int pos) const;
 };
 
 bool operator==(TritArr::Equal trit_equal, Trit val);
