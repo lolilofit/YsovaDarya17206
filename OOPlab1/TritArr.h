@@ -5,10 +5,11 @@
 #include<vector>
 #include<unordered_map>
 
-class TritArr
+class TritSet
 {
-	//const int size_t = (sizeof(unsigned int) * 4);
+	//the number of original size
 	int count = 0;
+	//last true/false element
 	int maxlen;
 
 	int rest(int pos);
@@ -16,47 +17,50 @@ class TritArr
 	void _resize(int index);
 
  public:
+	 //set of trits
 	 std::vector <unsigned int> arr;
 
 	class Equal {
 	 public:
-		TritArr* p;
+		 TritSet * p;
+		 //position we want to set to or read from
 		int pos = -1;
+		//value in this position
 		int value = -1;
 
 		Equal(int position, int val);
 
-		TritArr& operator=(const Trit &val);
+		TritSet& operator=(const Trit &val);
 
 		operator Trit() const;
 	};
 	
 public:
 
-	std::unordered_map< Trit, int, std::hash<int> > cardinality();
+	std::unordered_map< Trit, int, std::hash<Trit> > cardinality();
 
-	TritArr(int length);
+	TritSet(int length);
 
-	~TritArr();
+	~TritSet();
 
-	void Trim(int last_index);
+	void trim(int last_index);
 
-	size_t LastUnknown();
+	size_t lenght();
 
 	size_t cardinality(Trit val);
 	
 	size_t capacity();
 
-	void Shrink();
+	void shrink();
 
 	int read(int pos) const;
 
 	void SetTrit(int pos, Trit val);
 
-	TritArr::Equal operator[](int pos);
+	TritSet::Equal operator[](int pos);
 
 };
 
-bool operator==(TritArr::Equal trit_equal, Trit val);
+bool operator==(TritSet::Equal trit_equal, Trit val);
 
 #endif
