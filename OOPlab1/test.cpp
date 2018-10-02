@@ -1,10 +1,11 @@
 #include "pch.h"
-#include"../Sample-Test1/TritArr.h"
-#include"../Sample-Test1/TritArr.cpp"
-#include"../Sample-Test1/LogicOp.h"
-#include"../Sample-Test1/LogicOp.cpp"
-#include"../Sample-Test1/OneTrit.h"
-#include"../Sample-Test1/OneTrit.cpp"
+#include"../test_trit/LogicOp.h"
+#include"../test_trit/LogicOp.cpp"
+#include"../test_trit/OneTrit.h"
+#include"../test_trit/OneTrit.cpp"
+#include"../test_trit/TritArr.h"
+#include"../test_trit/TritArr.cpp"
+
 #include"CppUnitTest.h"
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
@@ -36,126 +37,155 @@ TEST(test_onetrit_not, test_not) {
 	ASSERT_EQ(Trit::Unknown, ~Trit::Unknown);
 }
 
-TEST(test_trit_arr, test_name2) {
-	TritArr ar1(160);
-	TritArr ar2(144);
-	ar1.arr[0] = 3;
-	ar1.arr[1] = 3;
-	ar1.arr[2] = 3;
-	ar1.arr[3] = 0;
-	ar1.arr[4] = 0;
-	ar1.arr[5] = 0;
-	ar1.arr[6] = 1;
-	ar1.arr[7] = 1;
-	ar1.arr[8] = 1;
-	ar1.arr[9] = 1;
-	ar2.arr[0] = 0;
-	ar2.arr[1] = 1;
-	ar2.arr[2] = 3;
-	ar2.arr[3] = 0;
-	ar2.arr[4] = 1;
-	ar2.arr[5] = 3;
-	ar2.arr[6] = 0;
-	ar2.arr[7] = 1;
-	ar2.arr[8] = 3;
-
-	TritArr res_and(144);
-	res_and.arr[0] = 0;
-	res_and.arr[1] = 1;
-	res_and.arr[2] = 3;
-	res_and.arr[3] = 0;
-	res_and.arr[4] = 1;
-	res_and.arr[5] = 0;
-	res_and.arr[6] = 1;
-	res_and.arr[7] = 1;
-	res_and.arr[8] = 1;
+TEST(test_trits_and, test_name2) {
+	TritSet ar1(6);
+	TritSet ar2(16);
 	
-	TritArr hj = ar1 & ar2;
+	ar1[0] = Trit::True;
+	ar1[1] = Trit::Unknown;
+	ar1[2] = Trit::Unknown;
+	ar1[3] = Trit::False;
+	ar1[4] = Trit::False;
+	ar1[5] = Trit::False;
 
-	ASSERT_EQ(res_and.arr, (ar1&ar2).arr);
-	ASSERT_EQ(144, (ar1&ar2).capacity());
-	TritArr res_or(160);
-	res_or.arr[0] = 3;
-	res_or.arr[1] = 3;
-	res_or.arr[2] = 3;
-	res_or.arr[3] = 0;
-	res_or.arr[4] = 0;
-	res_or.arr[5] = 3;
-	res_or.arr[6] = 0;
-	res_or.arr[7] = 1;
-	res_or.arr[8] = 3;
-	res_or.arr[9] = 0;
-	ASSERT_EQ(res_or.arr, (ar1|ar2).arr);
-	ASSERT_EQ(160, (ar1|ar2).capacity());
+	ar2[0] = Trit::False;
+	ar2[1] = Trit::False;
+	ar2[2] = Trit::Unknown;
+	ar2[3] = Trit::False;
+	ar2[4] = Trit::Unknown;
+	ar2[5] = Trit::True;
+	
+	TritSet res(6);
+	res[0] = Trit::False;
+	res[1] = Trit::False;
+	res[2] = Trit::Unknown;
+	res[3] = Trit::False;
+	res[4] = Trit::False;
+	res[5] = Trit::False;
 
-	TritArr res_not(160);
-	res_not.arr[0] = 1;
-	res_not.arr[1] = 1;
-	res_not.arr[2] = 1;
-	res_not.arr[3] = 0;
-	res_not.arr[4] = 0;
-	res_not.arr[5] = 0;
-	res_not.arr[6] = 3;
-	res_not.arr[7] = 3;
-	res_not.arr[8] = 3;
-	res_not.arr[9] = 3;
+	for (int i = 0; i < (ar1&ar2).capacity(); i++)
+		ASSERT_EQ(res.read(i), (ar1&ar2).read(i));
 
-	ASSERT_EQ(res_not.arr, (~ar1).arr);
-	ASSERT_EQ(160, (~ar1).capacity());
+	ASSERT_EQ(6, (ar1&ar2).capacity());
 }
 
 
-TEST(test_read_write_shrink, test_name3) {
-	TritArr my_trit(100);
-	ASSERT_EQ(0, my_trit.LastUnknown());
-	ASSERT_EQ(100, my_trit.capacity());
+TEST(test_trits_or, test_name_or) {
+	TritSet ar1(6);
+	TritSet ar2(16);
+
+	ar1[0] = Trit::True;
+	ar1[1] = Trit::Unknown;
+	ar1[2] = Trit::Unknown;
+	ar1[3] = Trit::False;
+	ar1[4] = Trit::False;
+	ar1[5] = Trit::False;
+
+	ar2[0] = Trit::False;
+	ar2[1] = Trit::False;
+	ar2[2] = Trit::Unknown;
+	ar2[3] = Trit::False;
+	ar2[4] = Trit::Unknown;
+	ar2[5] = Trit::True;
+	ar2[6] = Trit::True;
+
+	TritSet res(16);
+	res[0] = Trit::True;
+	res[1] = Trit::Unknown;
+	res[2] = Trit::Unknown;
+	res[3] = Trit::False;
+	res[4] = Trit::Unknown;
+	res[5] = Trit::True;
+	res[6] = Trit::True;
+
+	for (int i = 0; i < (ar1|ar2).capacity(); i++)
+		ASSERT_EQ(res.read(i), (ar1|ar2).read(i));
+
+	ASSERT_EQ(16, (ar1|ar2).capacity());
+}
+
+
+TEST(test_trits_not, test_name_trits) {
+	TritSet ar1(48);
+
+	ar1[0] = Trit::True;
+	ar1[1] = Trit::Unknown;
+	ar1[2] = Trit::False;
 	
-	my_trit.Shrink();
-	ASSERT_EQ(0, my_trit.LastUnknown());
-	ASSERT_EQ(100, my_trit.capacity());
+	TritSet res(48);
+	res[0] = Trit::False;
+	res[1] = Trit::Unknown;
+	res[2] = Trit::True;
 	
+	for (int i = 0; i < (~(ar1)).capacity(); i++)
+		ASSERT_EQ(res.read(i), (~(ar1)).read(i));
+
+	ASSERT_EQ(48, (~(ar1)).capacity());
+}
+
+TEST(test_shrink_operators, test_name3) {
+	TritSet my_trit(100);
+	ASSERT_EQ(0, my_trit.lenght());
+	ASSERT_EQ(100, my_trit.capacity());
+
+	my_trit.shrink();
+	ASSERT_EQ(0, my_trit.lenght());
+	ASSERT_EQ(100, my_trit.capacity());
+
 	my_trit[110] = Trit::True;
 
-	ASSERT_EQ(111, my_trit.LastUnknown());
+	ASSERT_EQ(111, my_trit.lenght());
 	ASSERT_EQ(111, my_trit.capacity());
 
 
 	my_trit[110] = Trit::False;
 
-	ASSERT_EQ(111, my_trit.LastUnknown());
+	ASSERT_EQ(111, my_trit.lenght());
 	ASSERT_EQ(111, my_trit.capacity());
 
 
 	my_trit[126] = Trit::True;
 
-	ASSERT_EQ(127, my_trit.LastUnknown());
+	ASSERT_EQ(127, my_trit.lenght());
 	ASSERT_EQ(127, my_trit.capacity());
-	
-	my_trit.Shrink();
 
-	ASSERT_EQ(127, my_trit.LastUnknown());
+	my_trit.shrink();
+
+	ASSERT_EQ(127, my_trit.lenght());
 	ASSERT_EQ(127, my_trit.capacity());
-	
+
 	my_trit[126] = Trit::Unknown;
-	my_trit.Shrink();
+	my_trit.shrink();
 
-	ASSERT_EQ(111, my_trit.LastUnknown());
+	ASSERT_EQ(111, my_trit.lenght());
 	ASSERT_EQ(111, my_trit.capacity());
-	
+
 }
 
 
 TEST(test_equal_trits, test_equal) {
-	TritArr trit_one(100);
+	TritSet trit_one(100);
 	trit_one[99] = Trit::True;
 
 	ASSERT_EQ(1, trit_one[99] == Trit::True);
 	ASSERT_EQ(0, trit_one[99] == Trit::False);
 	ASSERT_EQ(0, trit_one[99] == Trit::Unknown);
+
+	trit_one[99] = Trit::False;
+
+	ASSERT_EQ(0, trit_one[99] == Trit::True);
+	ASSERT_EQ(1, trit_one[99] == Trit::False);
+	ASSERT_EQ(0, trit_one[99] == Trit::Unknown);
+
+	trit_one[99] = Trit::Unknown;
+
+	ASSERT_EQ(0, trit_one[99] == Trit::True);
+	ASSERT_EQ(0, trit_one[99] == Trit::False);
+	ASSERT_EQ(1, trit_one[99] == Trit::Unknown);
 }
 
 TEST(test_cardinality, test_name3) {
-	TritArr trit(100);
+	TritSet trit(100);
 	ASSERT_EQ(0, trit.cardinality(Trit::False));
 	ASSERT_EQ(0, trit.cardinality(Trit::True));
 	ASSERT_EQ(112, trit.cardinality(Trit::Unknown));
@@ -174,28 +204,101 @@ TEST(test_cardinality, test_name3) {
 	ASSERT_EQ(1, trit.cardinality(Trit::True));
 	ASSERT_EQ(1, trit.cardinality(Trit::False));
 	ASSERT_EQ(1, trit.cardinality(Trit::Unknown));
-	
+
 	trit[100] = Trit::False;
 	ASSERT_EQ(0, trit.cardinality(Trit::True));
 	ASSERT_EQ(2, trit.cardinality(Trit::False));
 	ASSERT_EQ(1, trit.cardinality(Trit::Unknown));
-	
+
 }
 
 TEST(tst_trim, test_name_trim) {
-	TritArr trit(100);
+	TritSet trit(100);
 
 	trit[99] = Trit::False;
-	trit.Trim(99);
+	trit.trim(99);
 	Trit val = trit[99];
 	ASSERT_EQ(0, static_cast<int>(val));
 
 	trit[0] = Trit::False;
 	trit[1] = Trit::True;
 	trit[99] = Trit::True;
-	trit.Trim(0);
+	trit.trim(0);
 	for (int i = 0; i < 100; i++) {
 		Trit val = trit[i];
 		ASSERT_EQ(0, static_cast<int>(val));
 	}
+}
+
+TEST(test_unordered_map, test_name_map) {
+	TritSet trit(100);
+	trit[110] = Trit::True;
+    
+	std::unordered_map< Trit, int, std::hash<Trit> > result = trit.cardinality();
+	ASSERT_EQ(1, result[Trit::True]);
+	ASSERT_EQ(1, result[Trit::Unknown]);
+	ASSERT_EQ(0, result[Trit::False]);
+
+	trit[100] = Trit::True;
+
+	result = trit.cardinality();
+	ASSERT_EQ(2, result[Trit::True]);
+	ASSERT_EQ(1, result[Trit::Unknown]);
+	ASSERT_EQ(0, result[Trit::False]);
+
+	trit[110] = Trit::False;
+
+	result = trit.cardinality();
+	ASSERT_EQ(1, result[Trit::True]);
+	ASSERT_EQ(1, result[Trit::Unknown]);
+	ASSERT_EQ(1, result[Trit::False]);
+	
+	trit[100] = Trit::False;
+
+	result = trit.cardinality();
+	ASSERT_EQ(0, result[Trit::True]);
+	ASSERT_EQ(1, result[Trit::Unknown]);
+	ASSERT_EQ(2, result[Trit::False]);
+}
+
+TEST(test_set_trit, test_name_set) {
+	TritSet trit(100);
+
+	trit.SetTrit(99, Trit::True);
+	Trit res = trit[99];
+	ASSERT_EQ(res, Trit::True);
+
+	trit.SetTrit(90, Trit::False);
+	res = trit[90];
+	ASSERT_EQ(res, Trit::False);
+
+	trit.SetTrit(56, Trit::Unknown);
+	res = trit[56];
+	ASSERT_EQ(res, Trit::Unknown);
+
+}
+
+TEST(test_read_trit, test_name_read) {
+	TritSet trit(100);
+	trit[99] = Trit::True;
+	ASSERT_EQ(3 , trit.read(99));
+
+	trit[90] = Trit::False;
+	ASSERT_EQ(1, trit.read(90));
+
+	trit[89] = Trit::Unknown;
+	ASSERT_EQ(0, trit.read(89));
+}
+
+TEST(equality_cast_operator, test_name_equality) {
+	TritSet trit(100);
+
+	trit[99] = Trit::True;
+	ASSERT_EQ(Trit::True, trit[99]);
+
+	trit[99] = Trit::False;
+	ASSERT_EQ(Trit::False, trit[99]);
+
+	trit[99] = Trit::Unknown;
+	ASSERT_EQ(Trit::Unknown, trit[99]);
 }
