@@ -4,10 +4,10 @@
 #include "TritArr.h"
 
 
-TritArr operator&(TritArr &first, TritArr &second);
+TritSet operator&(TritSet &first, TritSet &second);
 
-TritArr operator|(TritArr &first, TritArr &second);
+TritSet operator|(TritSet &first, TritSet &second);
 
-TritArr operator~(TritArr &first);
+TritSet operator~(TritSet &first);
 
 #endif
