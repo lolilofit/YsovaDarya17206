@@ -1,9 +1,6 @@
 #include "OneTrit.h"
 
-Trit set(Trit val) {
-	Trit trit = val;
-	return trit;
-}
+//logic operators for one trit
 
 Trit operator &(Trit first, Trit second) {
 	if (first == Trit::False || second == Trit::False)
