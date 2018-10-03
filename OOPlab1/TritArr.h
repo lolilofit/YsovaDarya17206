@@ -11,6 +11,7 @@ class TritSet
 	int count = 0;
 	//last true/false element
 	int maxlen;
+	std::vector <unsigned int> set;
 
 	int rest(int pos);
 
@@ -18,9 +19,8 @@ class TritSet
 
  public:
 	 //set of trits
-	 std::vector <unsigned int> arr;
 
-	class Equal {
+	class SetProxy {
 	 public:
 		 TritSet * p;
 		 //position we want to set to or read from
@@ -28,7 +28,9 @@ class TritSet
 		//value in this position
 		int value = -1;
 
-		Equal(int position, int val);
+		SetProxy(int position, int val);
+
+		//Equal(const Equal &src) : pos(src.pos), value(src.value);
 
 		TritSet& operator=(const Trit &val);
 
@@ -55,12 +57,12 @@ public:
 
 	int read(int pos) const;
 
-	void SetTrit(int pos, Trit val);
+	void set_trir(int pos, Trit val);
 
-	TritSet::Equal operator[](int pos);
+	TritSet::SetProxy operator[](int pos);
 
 };
 
-bool operator==(TritSet::Equal trit_equal, Trit val);
+bool operator==(TritSet::SetProxy trit_equal, Trit val);
 
 #endif
