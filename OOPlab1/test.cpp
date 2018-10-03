@@ -264,15 +264,15 @@ TEST(test_unordered_map, test_name_map) {
 TEST(test_set_trit, test_name_set) {
 	TritSet trit(100);
 
-	trit.SetTrit(99, Trit::True);
+	trit.set_trir(99, Trit::True);
 	Trit res = trit[99];
 	ASSERT_EQ(res, Trit::True);
 
-	trit.SetTrit(90, Trit::False);
+	trit.set_trir(90, Trit::False);
 	res = trit[90];
 	ASSERT_EQ(res, Trit::False);
 
-	trit.SetTrit(56, Trit::Unknown);
+	trit.set_trir(56, Trit::Unknown);
 	res = trit[56];
 	ASSERT_EQ(res, Trit::Unknown);
 
