@@ -15,12 +15,6 @@ class words {
 
 	void SortOut(ofstream &out);
 
-	void MakeMap(string arg);
-
-	string EraseChar(std::string arg, char ch, int pos);
-
-	string CleanString(string arg);
-
 	string ToLower(string arg);
 
 
