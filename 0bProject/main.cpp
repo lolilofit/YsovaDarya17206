@@ -7,18 +7,23 @@ using namespace std;
 
 
 
-void OpenIn(const string InputFile, ifstream &in) {
+int OpenIn(const string InputFile, ifstream &in) {
 	
 	in.open(InputFile);
-	if (!in.is_open()) 
+	if (!in.is_open()) {
 		cerr << "no such file";
+		return 1;
+	}
+	return 0;
 }
 
-void OpenOut(const string OutFile, ofstream &out) {
+int OpenOut(const string OutFile, ofstream &out) {
 	out.open(OutFile);
-	if (!out.is_open()) 
+	if (!out.is_open()) {
 		cerr << "no such file";
-		
+		return 1;
+	}
+	return 0;
 }
 
 int main(int argc, const char *argv[]) {
@@ -27,9 +32,9 @@ int main(int argc, const char *argv[]) {
 	ofstream out;
 	
 	if (argc == 3) {
-		OpenIn(argv[1], in);
-		OpenOut(argv[2], out);
-		if (!in.is_open() || !out.is_open())
+		if (OpenIn(argv[1], in))
+			return 0;
+		if (OpenOut(argv[2], out))
 			return 0;
 	}
 	else {
