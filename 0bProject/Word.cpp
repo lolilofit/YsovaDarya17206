@@ -14,32 +14,6 @@ void words::SortOut(ofstream &out) {
 	return;
 }
 
-void words::MakeMap(string arg) {
-	//if there is no element with this word in a map
-	if (WordsList.find(arg) == WordsList.end())
-		WordsList.insert(WordsList.end(), make_pair(arg, 1));
-	else
-		//if we have an element with this word in a map
-		WordsList[arg]++;
-
-	count++;
-	return;
-}
-
-string words::EraseChar(std::string arg, char ch, int pos) {
-	if (arg[pos] == ch)
-		arg.erase(arg.find(ch));
-	return arg;
-}
-
-string words::CleanString(string arg) {
-
-	for (auto &i : arg) {
-		if (!((i >= '0') && (i <= '9') || (i >= 'A') && (i <= 'Z') || (i >= 'a') && (i <= 'z')))
-			arg.erase(arg.find(i));
-	}
-	return arg;
-}
 
 string words::ToLower(string arg) {
 	setlocale(LC_ALL, "Russian");
@@ -48,21 +22,22 @@ string words::ToLower(string arg) {
 }
 
 int words::CountWords(ifstream &in, ofstream &out) {
+	string one_word;
 
 	while (!in.eof()) {
-		string arg;
-		//get one word
-		getline(in, arg, ' ');
-		//translate all symbols from the word to small register
-		//and delete all punctuation marks
-		arg = ToLower(arg);
-		arg = CleanString(arg);
-		if ((arg[0] != '\n') && (arg.size() != 0))
-			//create a map with words and their frequency
-			MakeMap(arg);
+		char ch = in.get();
+		if ((ch >= '0') && (ch <= '9') || (ch >= 'A') && (ch <= 'Z') || (ch >= 'a') && (ch <= 'z'))
+			one_word = one_word + ch;
+		else {
+			if (one_word.size()) {
+				one_word = ToLower(one_word);
+				WordsList[one_word]++;
+				count++;
+				one_word.clear();
+			}
+		}
 	}
 
-	//put wors and their frequense in descending order to the csv file 
 	SortOut(out);
 	return 0;
 
