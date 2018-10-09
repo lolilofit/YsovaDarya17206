@@ -1,5 +1,5 @@
 #include "LogicOp.h"
-#include "TritArr.h"
+#include "TritSet.h"
 #include<iostream>
 #include<algorithm>
 
