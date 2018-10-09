@@ -3,8 +3,8 @@
 #include"../test_trit/LogicOp.cpp"
 #include"../test_trit/OneTrit.h"
 #include"../test_trit/OneTrit.cpp"
-#include"../test_trit/TritArr.h"
-#include"../test_trit/TritArr.cpp"
+#include"../test_trit/TritSet.h"
+#include"../test_trit/TritSet.cpp"
 
 #include"CppUnitTest.h"
 
