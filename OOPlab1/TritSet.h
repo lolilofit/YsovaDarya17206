@@ -1,5 +1,5 @@
-#ifndef _TRITARR_
-#define _TRITARR_
+#ifndef _TRITSET_
+#define _TRITSET_
 #include"OneTrit.h"
 #include<iostream>
 #include<vector>
