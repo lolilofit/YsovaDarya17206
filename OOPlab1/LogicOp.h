@@ -1,7 +1,7 @@
 #ifndef _LOGICOP_
 #define _LOGICOP_
 #include"OneTrit.h"
-#include "TritArr.h"
+#include "TritSet.h"
 
 
 TritSet operator&(TritSet &first, TritSet &second);
