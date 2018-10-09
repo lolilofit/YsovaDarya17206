@@ -30,7 +30,9 @@ class TritSet
 
 		SetProxy(int position, int val);
 
-		//Equal(const Equal &src) : pos(src.pos), value(src.value);
+	//	SetProxy(const SetProxy &src);
+
+//		~SetProxy();
 
 		TritSet& operator=(const Trit &val);
 
@@ -42,8 +44,6 @@ public:
 	std::unordered_map< Trit, int, std::hash<Trit> > cardinality();
 
 	TritSet(int length);
-
-	~TritSet();
 
 	void trim(int last_index);
 
