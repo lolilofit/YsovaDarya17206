@@ -30,10 +30,6 @@ class TritSet
 
 		SetProxy(int position, int val);
 
-	//	SetProxy(const SetProxy &src);
-
-//		~SetProxy();
-
 		TritSet& operator=(const Trit &val);
 
 		operator Trit() const;
