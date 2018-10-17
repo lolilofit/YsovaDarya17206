@@ -25,9 +25,9 @@ class TritSet
 		 //position we want to set to or read from
 		 int pos = -1;
 		
+		  SetProxy(int position, TritSet *point);
+		
 	 public:
-		SetProxy(int position, int val);
-
 		TritSet& operator=(const Trit &val);
 
 		operator Trit() const;
