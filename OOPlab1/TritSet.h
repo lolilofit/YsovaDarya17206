@@ -20,14 +20,12 @@ class TritSet
  public:
 	 //set of trits
 
-	class SetProxy {
-	 public:
+	class SetProxy {  //friend
 		 TritSet * p;
 		 //position we want to set to or read from
-		int pos = -1;
-		//value in this position
-		int value = -1;
-
+		 int pos = -1;
+		
+	 public:
 		SetProxy(int position, int val);
 
 		TritSet& operator=(const Trit &val);
@@ -43,11 +41,11 @@ public:
 
 	void trim(int last_index);
 
-	size_t lenght();
+	size_t lenght() const;
 
-	size_t cardinality(Trit val);
+	size_t cardinality(Trit val) const;
 	
-	size_t capacity();
+	size_t capacity() const;
 
 	void shrink();
 
@@ -56,6 +54,7 @@ public:
 	void set_trir(int pos, Trit val);
 
 	TritSet::SetProxy operator[](int pos);
+	//Trit operator[](int pos) const;
 
 };
 
