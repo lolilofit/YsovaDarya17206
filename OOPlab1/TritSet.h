@@ -49,7 +49,7 @@ public:
 
 	void shrink();
 
-	int read(int pos) const;
+	Trit read(int pos) const;
 
 	void set_trir(int pos, Trit val);
 
