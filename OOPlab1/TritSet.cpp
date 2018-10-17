@@ -39,11 +39,11 @@ void  TritSet::trim(int last_index) {
 	maxlen = last_index + 1;
 }
 
-size_t TritSet::capacity() {
+size_t TritSet::capacity() const{
 	return this->maxlen;
 }
 
-size_t TritSet::lenght() {
+size_t TritSet::lenght() const{
 
 	//find the last true/false element
 	for (int i = this->set.size() * sizeof(unsigned int) * 4; i >= 0; i--) {
@@ -53,7 +53,7 @@ size_t TritSet::lenght() {
 	return 0;
 }
 
-size_t TritSet::cardinality(Trit val) {
+size_t TritSet::cardinality(Trit val) const{
 	int count_val = 0;
 
 	//find true/false trit and count them
@@ -185,4 +185,9 @@ std::unordered_map< Trit, int, std::hash<Trit> > TritSet::cardinality() {
 	result.insert(mypair_unknown);
 
 	return result;
+}
+
+
+Trit operator[](int pos) const {
+  //return this->read(pos);
 }
