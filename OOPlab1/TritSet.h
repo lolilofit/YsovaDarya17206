@@ -20,7 +20,7 @@ class TritSet
  public:
 	 //set of trits
 
-	class SetProxy {  //friend
+	friend class SetProxy {  //friend
 		 TritSet * p;
 		 //position we want to set to or read from
 		 int pos = -1;
