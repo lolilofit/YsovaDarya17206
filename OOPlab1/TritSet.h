@@ -54,7 +54,8 @@ public:
 	void set_trir(int pos, Trit val);
 
 	TritSet::SetProxy operator[](int pos);
-	//Trit operator[](int pos) const;
+	
+	Trit operator[](int pos) const;
 
 };
 
