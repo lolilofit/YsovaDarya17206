@@ -16,21 +16,7 @@ TritSet::TritSet(int length) {
 }
 
 
-TritSet::SetProxy::SetProxy(int position, int val) { pos = position; value = val; }
-
-/*
-TritSet::SetProxy::SetProxy(const SetProxy &src) {
-pos = src.pos;
-value = src.value;
-p = new TritSet(src.p->lenght());
-p->set.insert(p->set.begin(), src.p->set.begin(), src.p->set.end());
-}
-
-
-TritSet::SetProxy::~SetProxy() {
-delete[] p;
-}
-*/
+TritSet::SetProxy::SetProxy(int position, TritSet *point) { pos = position, p = point}
 
 //set all trits after trit with last_index position to unknown
 void  TritSet::trim(int last_index) {
@@ -47,7 +33,7 @@ size_t TritSet::lenght() const{
 
 	//find the last true/false element
 	for (int i = this->set.size() * sizeof(unsigned int) * 4; i >= 0; i--) {
-		if (this->read(i) > 0)
+		if (this->read(i) != Trit::Unknown)
 			return i + 1;
 	}
 	return 0;
@@ -60,7 +46,7 @@ size_t TritSet::cardinality(Trit val) const{
 	if (static_cast<int> (val) != 0) {
 		for (int i = this->set.size() - 1; i >= 0; i--) {
 			for (int j = (sizeof(unsigned int) * 4) - 1; j >= 0; j--) {
-				if (this->read(i * (sizeof(unsigned int) * 4) + j) == static_cast<int> (val))
+				if (this->read(i * (sizeof(unsigned int) * 4) + j) == val)
 					count_val++;
 			}
 		}
@@ -90,7 +76,7 @@ void TritSet::_resize(int index) {
 }
 
 //read trit from set of trits
-int TritSet::read(int pos) const {
+Trit TritSet::read(int pos) const {
 	if (this->set.size() * (sizeof(unsigned int) * 4) - 1 < pos)
 		return 0;
 	unsigned int point = this->set[pos / (sizeof(unsigned int) * 4)];
@@ -134,14 +120,13 @@ void TritSet::set_trir(int pos, Trit val) {
 //brackets operator overload
 TritSet::SetProxy TritSet::operator[](int pos) {
 	//return an element of interior class with necessary position and element in this position
-	SetProxy pack(pos, this->read(pos));
-	pack.p = this;
+	SetProxy pack(pos, this);
 	return pack;
 }
 
 //converting from element of interior class to trit from necessary position
 TritSet::SetProxy::operator Trit() const {
-	return static_cast<Trit> (this->p->read(pos));
+	return this->p->read(pos);
 }
 
 //equality operator overload
@@ -156,7 +141,7 @@ bool operator==(TritSet::SetProxy trit_equal, Trit val) {
 
 	//get set of trits from the link in element of interior class
 	TritSet trit_arr = *trit_equal.p;
-	if (static_cast<int>(val) == trit_arr.read(trit_equal.pos))
+	if (val == trit_arr.read(trit_equal.pos))
 		res = 1;
 	return res;
 }
@@ -168,9 +153,9 @@ std::unordered_map< Trit, int, std::hash<Trit> > TritSet::cardinality() {
 
 	//count number of true and false trits
 	for (int i = 0; i < this->lenght(); i++) {
-		if (this->read(i) == 1)
+		if (this->read(i) == Trit::False)
 			count_false++;
-		if (this->read(i) == 3)
+		if (this->read(i) == Trit::True)
 			count_true++;
 	}
 
@@ -189,5 +174,5 @@ std::unordered_map< Trit, int, std::hash<Trit> > TritSet::cardinality() {
 
 
 Trit operator[](int pos) const {
-  //return this->read(pos);
+  return this->read(pos);
 }
