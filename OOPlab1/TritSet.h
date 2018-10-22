@@ -5,6 +5,8 @@
 #include<vector>
 #include<unordered_map>
 
+class SetProxy;
+
 class TritSet
 {
 	//the number of original size
@@ -17,23 +19,8 @@ class TritSet
 
 	void _resize(int index);
 
- public:
-	 //set of trits
-
-	friend class SetProxy {  //friend
-		 TritSet * p;
-		 //position we want to set to or read from
-		 int pos = -1;
-		
-		  SetProxy(int position, TritSet *point);
-		
-	 public:
-		TritSet& operator=(const Trit &val);
-
-		operator Trit() const;
-	};
-	
 public:
+	TritSet();
 
 	std::unordered_map< Trit, int, std::hash<Trit> > cardinality();
 
@@ -41,11 +28,11 @@ public:
 
 	void trim(int last_index);
 
-	size_t lenght() const;
+	size_t lenght();
 
-	size_t cardinality(Trit val) const;
+	size_t cardinality(Trit val);
 	
-	size_t capacity() const;
+	size_t capacity();
 
 	void shrink();
 
@@ -53,12 +40,29 @@ public:
 
 	void set_trir(int pos, Trit val);
 
-	TritSet::SetProxy operator[](int pos);
-	
+	SetProxy operator[](int pos);
+    
 	Trit operator[](int pos) const;
 
 };
 
-bool operator==(TritSet::SetProxy trit_equal, Trit val);
+class SetProxy : public TritSet {
+	int pos = -1;
+	//value in this position
+	TritSet * p;
+	//position we want to set to or read from
+
+	SetProxy(int position, TritSet * ptr);
+	friend TritSet;
+
+public:
+
+	TritSet & operator=(const Trit &val);
+
+	operator Trit() const;
+};
+
+bool operator==(const int val, Trit trit);
+
 
 #endif
