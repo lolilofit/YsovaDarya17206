@@ -1,5 +1,6 @@
 #include "Celculate.h"
 #include "exeptions.h"
+#include<conio.h>
 
 void Calculator::read_file(ifstream &in) {
 	string operation;
@@ -33,6 +34,7 @@ void Calculator::parse(string operation) {
 	}
 	catch (MyExceptions &e) {
 		cout << "cought an exception:" << e.what() << '\n';
+    	_getch();
 	}
 }
 

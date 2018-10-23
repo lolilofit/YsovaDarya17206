@@ -14,13 +14,23 @@
 
 using namespace std;
 
+int OpenIn(const string InputFile, ifstream &in) {
+
+	in.open(InputFile);
+	if (!in.is_open()) {
+		cerr << "no such file";
+		return 1;
+	}
+	return 0;
+}
 
 int main(int argc, const char *argv[]) {
 	ifstream in;
 	Calculator my_calculator;
 
 	if (argc == 2) {
-		in.open(argv[1]);
+		if (OpenIn(argv[1], in))
+			return 0;
 		my_calculator.read_file(in);
 	}
 	else
