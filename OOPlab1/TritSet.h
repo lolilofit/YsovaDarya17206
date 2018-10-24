@@ -43,11 +43,11 @@ public:
 
 	void trim(int last_index);
 
-	size_t lenght();
+	size_t lenght() const;
 
-	size_t cardinality(Trit val);
+	size_t cardinality(Trit val) const;
 	
-	size_t capacity();
+	size_t capacity() const;
 
 	void shrink();
 
