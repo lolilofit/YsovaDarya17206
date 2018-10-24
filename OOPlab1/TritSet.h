@@ -20,6 +20,21 @@ class TritSet
 	void _resize(int index);
 
 public:
+	class SetProxy {
+	int pos = -1;
+	//value in this position
+	TritSet * p;
+	//position we want to set to or read from
+
+	SetProxy(int position, TritSet * ptr);
+	friend TritSet;
+
+public:
+
+	TritSet & operator=(const Trit &val);
+
+	operator Trit() const;
+};
 	TritSet();
 
 	std::unordered_map< Trit, int, std::hash<Trit> > cardinality();
@@ -46,21 +61,7 @@ public:
 
 };
 
-class SetProxy : public TritSet {
-	int pos = -1;
-	//value in this position
-	TritSet * p;
-	//position we want to set to or read from
 
-	SetProxy(int position, TritSet * ptr);
-	friend TritSet;
-
-public:
-
-	TritSet & operator=(const Trit &val);
-
-	operator Trit() const;
-};
 
 bool operator==(const int val, Trit trit);
 
