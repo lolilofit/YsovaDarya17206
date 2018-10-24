@@ -136,7 +136,7 @@ TritSet::SetProxy TritSet::operator[](int pos) {
 
 
 //converting from element of interior class to trit from necessary position
-TritSrt::SetProxy::operator Trit() const {
+TritSet::SetProxy::operator Trit() const {
     return static_cast<Trit> (this->p->read(pos));
 }
 
