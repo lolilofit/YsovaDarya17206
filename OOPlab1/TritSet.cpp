@@ -31,11 +31,11 @@ void  TritSet::trim(int last_index) {
 		maxlen = last_index + 1;
 }
 
-size_t TritSet::capacity() {
+size_t TritSet::capacity() const {
     return this->maxlen;
 }
 
-size_t TritSet::lenght() {
+size_t TritSet::lenght() const {
     
 	//find the last true/false element
 	for (int i = this->set.size() * sizeof(unsigned int) * 4; i >= 0; i--) {
@@ -45,7 +45,7 @@ size_t TritSet::lenght() {
     return 0;
 }
 
-size_t TritSet::cardinality(Trit val) {
+size_t TritSet::cardinality(Trit val) const{
     int count_val = 0;
 
 	//find true/false trit and count them
@@ -124,7 +124,7 @@ void TritSet::set_trir(int pos, Trit val) {
 }
 
 //brackets operator overload
-SetProxy TritSet::operator[](int pos) {
+TritSet::SetProxy TritSet::operator[](int pos) {
 	//return an element of interior class with necessary position and element in this position
 	SetProxy pack(pos, this);
     return pack;
@@ -136,12 +136,12 @@ SetProxy TritSet::operator[](int pos) {
 
 
 //converting from element of interior class to trit from necessary position
-SetProxy::operator Trit() const {
+TritSrt::SetProxy::operator Trit() const {
     return static_cast<Trit> (this->p->read(pos));
 }
 
 //equality operator overload
-TritSet& SetProxy::operator=(const Trit &val) {
+TritSet& TritSet::SetProxy::operator=(const Trit &val) {
     p->set_trir(pos, val);
     return *p;
 }
