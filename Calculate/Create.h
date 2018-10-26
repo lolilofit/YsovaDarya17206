@@ -13,18 +13,9 @@
 #include "exeptions.h"
 
 class Create {
-
 public:
-
-	static const map<string, Create*> operations;
-
-	Operations* factory_metod(list<string> &arguments, Context &stack);
-
 	virtual Operations* make() { return (new Base()); };
-
 };
-
-
 
 class CreatePush : public Create {
 	Operations* make() override;

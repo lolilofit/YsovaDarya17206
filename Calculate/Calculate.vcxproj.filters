@@ -33,11 +33,11 @@
     <ClCompile Include="Celculate.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
+    <ClCompile Include="Factory.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="init.h">
-      <Filter>Файлы заголовков</Filter>
-    </ClInclude>
     <ClInclude Include="exeptions.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
@@ -51,6 +51,9 @@
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="Celculate.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Factory.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
   </ItemGroup>

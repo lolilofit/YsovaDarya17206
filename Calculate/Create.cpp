@@ -1,12 +1,5 @@
 #include "Create.h"
 
-Operations* Create::factory_metod(list<string> &arguments, Context &stack) {
-
-	string name = *arguments.begin();
-	arguments.remove(*(arguments.begin()));
-	return operations.at(name)->make();
-}
-
 Operations* CreatePush::make() {
 	return new PUSH();
 }

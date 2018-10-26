@@ -28,9 +28,12 @@ void Calculator::parse(string operation) {
 	if (arg != "")
 		arguments.push_back(arg);
 
-	Create f;
+//	Create f;
 	try {
-		(f.factory_metod(arguments, stack))->abstract_operation(arguments, stack);
+		Operations* one = Factory::get_instance()->factory_metod(arguments)->make();
+		one->abstract_operation(arguments, stack); 
+
+//		(f.factory_metod(arguments, stack))->abstract_operation(arguments, stack);
 	}
 	catch (MyExceptions &e) {
 		cout << "cought an exception:" << e.what() << '\n';

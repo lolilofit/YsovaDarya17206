@@ -119,6 +119,7 @@
     <ClCompile Include="Context.cpp" />
     <ClCompile Include="Create.cpp" />
     <ClCompile Include="exeptions.cpp" />
+    <ClCompile Include="Factory.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Operations.cpp" />
   </ItemGroup>
@@ -127,7 +128,7 @@
     <ClInclude Include="Context.h" />
     <ClInclude Include="Create.h" />
     <ClInclude Include="exeptions.h" />
-    <ClInclude Include="init.h" />
+    <ClInclude Include="Factory.h" />
     <ClInclude Include="Operations.h" />
   </ItemGroup>
   <ItemGroup>
