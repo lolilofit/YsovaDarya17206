@@ -11,11 +11,9 @@
 #include "Context.h"
 #include "Operations.h"
 #include "exeptions.h"
+#include "Factory.h"
 
-class Create {
-public:
-	virtual Operations* make() { return (new Base()); };
-};
+
 
 class CreatePush : public Create {
 	Operations* make() override;

@@ -10,24 +10,10 @@
 #include<vector>
 #include "Context.h"
 #include "exeptions.h"
-
+#include "Factory.h"
 
 using namespace std;
 
-class Operations {
-public:
-	virtual void abstract_operation(list<string> arguments, Context &stack) {};
-	bool is_number(string val);
-	virtual void catch_ecxeption(list<string> arguments, Context &stack) {};
-};
-
-
-class Base : public Operations {
-
-public:
-
-	void abstract_operation(list<string> arguments, Context &stack) override;
-};
 
 class PUSH : public Operations {
 

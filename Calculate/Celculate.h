@@ -4,6 +4,8 @@
 #include "Operations.h"
 #include "Create.h"
 #include "Factory.h"
+#include "Context.h"
+#include "exeptions.h"
 
 class Calculator {
 
