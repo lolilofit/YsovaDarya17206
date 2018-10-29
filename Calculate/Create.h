@@ -14,7 +14,6 @@
 #include "Factory.h"
 
 
-
 class CreatePush : public Create {
 	Operations* make() override;
 };
