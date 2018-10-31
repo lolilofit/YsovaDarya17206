@@ -24,11 +24,11 @@ int OpenIn(const string InputFile, ifstream &in) {
 	return 0;
 }
 
+bool initial = init();
 
 int main(int argc, const char *argv[]) {
 	ifstream in;
 	Calculator my_calculator;
-	init();
 
 	if (argc == 2) {
 		if (OpenIn(argv[1], in))
