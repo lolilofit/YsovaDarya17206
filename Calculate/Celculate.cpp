@@ -36,7 +36,7 @@ void Calculator::parse(string operation) {
 		Operations *one = Factory::get_instance().factory_metod(name)->make();
 		one->abstract_operation(arguments, stack); 
 
-		delete[] one;
+		delete(one);
 
 	}
 	catch (MyExceptions &e) {
