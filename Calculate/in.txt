@@ -5,3 +5,4 @@ PUSH 4
 PUSH 3.4
 +
 + f
+PRINT

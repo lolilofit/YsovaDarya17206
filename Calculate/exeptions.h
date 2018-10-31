@@ -7,128 +7,87 @@ public:
 	virtual const char* what() const throw() { return "exeption happened"; }
 };
 
-class PushEcxeption : public MyExceptions {
-public:
-	const char* what() const throw() override { return "PUSH Failure"; }
-};
-
-class Push_lenght : public PushEcxeption {
+class Push_lenght : public MyExceptions {
 	const char* what() const throw() override { return "PUSH bad lenght"; }
 };
 
-class Push_argument : public PushEcxeption {
+class Push_argument : public MyExceptions {
 	const char* what() const throw() override { return "PUSH bad argument"; }
 };
 
-class PopEcxeption : public MyExceptions {
-	const char* what() const throw() override { return "POP failure"; }
-};
-
-class Pop_lenght : public PopEcxeption {
+class Pop_lenght : public MyExceptions {
 	const char* what() const throw() override { return "POP bad lenght"; }
 };
 
-class Pop_empty : public PopEcxeption {
+class Pop_empty : public MyExceptions {
 	const char* what() const throw() override { return "stack is empty"; }
 };
 
-class PlusEcxeption : public MyExceptions {
-public:
-	const char* what() const throw() override { return "+ Failure"; }
-};
-
-class Plus_lenght : public PlusEcxeption {
+class Plus_lenght : public MyExceptions {
 	const char* what() const throw() override { return "Plus bad lenght"; }
 };
 
-class Plus_argument : public PlusEcxeption {
+class Plus_argument : public MyExceptions {
 	const char* what() const throw() override { return "Plus bad argument"; }
 };
 
-class MinusEcxeption : public MyExceptions {
-public:
-	const char* what() const throw() override { return "- Failure"; }
-};
-
-class Minus_lenght : public MinusEcxeption {
+class Minus_lenght : public MyExceptions {
 	const char* what() const throw() override { return "Minus bad lenght"; }
 };
 
-class Minus_argument : public MinusEcxeption {
+class Minus_argument : public MyExceptions {
 	const char* what() const throw() override { return "Minus bad argument"; }
 };
 
-class DivideEcxeption : public MyExceptions {
-public:
-	const char* what() const throw() override { return "/ Failure"; }
-};
-
-class Divide_lenght : public DivideEcxeption {
+class Divide_lenght : public MyExceptions {
 	const char* what() const throw() override { return "divide bad lenght"; }
 };
 
-class Divide_argument : public DivideEcxeption {
+class Divide_argument : public MyExceptions {
 	const char* what() const throw() override { return "Divide bad argument"; }
 };
 
-class Divide_ByZero : public DivideEcxeption {
+class Divide_ByZero : public MyExceptions {
 	const char* what() const throw() override { return "Divide by zero"; }
 };
 
-class MultiplyEcxeption : public MyExceptions {
-public:
-	const char* what() const throw() override { return "* Failure"; }
-};
-
-class Multiply_lenght : public MultiplyEcxeption {
+class Multiply_lenght : public MyExceptions {
 	const char* what() const throw() override { return "Multiply bad lenght"; }
 };
 
-class Multiply_argument : public MultiplyEcxeption {
+class Multiply_argument : public MyExceptions {
 	const char* what() const throw() override { return "Multiply bad argument"; }
 };
 
-class SqrtEcxeption : public MyExceptions {
-	const char* what() const throw() override { return "Sqrt failure"; }
-};
-
-class Sqrt_lenght : public SqrtEcxeption {
+class Sqrt_lenght : public MyExceptions {
 	const char* what() const throw() override { return "Sqrt bad lenght"; }
 };
 
-class Sqrt_argument : public SqrtEcxeption {
+class Sqrt_argument : public MyExceptions {
 	const char* what() const throw() override { return "Sqrt bad arguments"; }
 };
 
-class Sqrt_negative : public SqrtEcxeption {
+class Sqrt_negative : public MyExceptions {
 	const char* what() const throw() override { return "Sqrt negative argument"; }
 };
 
-class PrintEcxeptions : public MyExceptions {
-	const char* what() const throw() override { return "Print failure"; }
-};
-
-class Print_empty : public PrintEcxeptions {
+class Print_empty : public MyExceptions {
 	const char* what() const throw() override { return "Stack is empty"; }
 };
 
-class Print_lenght : public PrintEcxeptions {
+class Print_lenght : public MyExceptions {
 	const char* what() const throw() override { return "Print bad lenght"; }
 };
 
-class Print_argument : public PrintEcxeptions {
+class Print_argument : public MyExceptions {
 	const char* what() const throw() override { return "Print bad argument"; }
 };
 
-class DefineEcxeptions : public MyExceptions {
-	const char* what() const throw() override { return "Define failure"; }
-};
-
-class Define_lenght : public DefineEcxeptions {
+class Define_lenght : public MyExceptions {
 	const char* what() const throw() override { return "Define bad lenght"; }
 };
 
-class Define_argument : public DefineEcxeptions {
+class Define_argument : public MyExceptions {
 	const char* what() const throw() override { return "Define bad argument"; }
 };
 

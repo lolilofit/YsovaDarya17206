@@ -13,8 +13,8 @@ class Calculator {
 	void parse(string arg);
 public:
 
-	void read_file(ifstream &in);
-	void read_console();
+	void read(istream& in);
+
 };
 
 

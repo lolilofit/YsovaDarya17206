@@ -33,10 +33,10 @@ int main(int argc, const char *argv[]) {
 	if (argc == 2) {
 		if (OpenIn(argv[1], in))
 			return 0;
-		my_calculator.read_file(in);
+		my_calculator.read(in);
 	}
 	else
-		my_calculator.read_console();
-
+		my_calculator.read(cin);
+	
 	return 0;
 }
