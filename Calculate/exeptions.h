@@ -91,4 +91,7 @@ class Define_argument : public MyExceptions {
 	const char* what() const throw() override { return "Define bad argument"; }
 };
 
+class Is_operation : public MyExceptions {
+	const char* what() const throw() override { return "no such operation"; }
+};
 #endif 

@@ -10,6 +10,8 @@ void Factory::init_cmd(string name, Create* operation) {
 }
 
 Create* Factory::factory_metod(string name) {
+	if (op.count(name) == 0)
+		throw Is_operation();
 	return op.at(name);
 }
 
