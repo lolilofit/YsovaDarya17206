@@ -12,15 +12,12 @@ bool is_number(string val) {
 }
 
 void PUSH::abstract_operation(list<string> arguments, Context &stack) {
-	if (arguments.size() != 1) {
-		Push_lenght e;
-		throw e;
-	}
-
-	if ((!is_number(*(arguments.begin()))) && (stack.count(*(arguments.begin())) == 0)) {
-		Push_argument err;
-		throw err;
-	}
+	if (arguments.size() != 1) 
+		throw Push_lenght();
+	
+	if ((!is_number(*(arguments.begin()))) && (stack.count(*(arguments.begin())) == 0)) 
+		throw Push_argument();
+	
 
 	if (is_number(*(arguments.begin())))
 		stack.push(stof(*(arguments.begin())));
@@ -29,36 +26,29 @@ void PUSH::abstract_operation(list<string> arguments, Context &stack) {
 }
 
 void POP::abstract_operation(list<string> arguments, Context &stack) {
-	if (arguments.size() != 0) {
-		Pop_lenght e;
-		throw e;
-	}
+	if (arguments.size() != 0) 
+		throw Pop_lenght();
+	
 
-	if (stack.is_empty()) {
-		Pop_empty e;
-		throw e;
-	}
+	if (stack.is_empty()) 
+		throw Pop_empty();
+	
 	stack.pop();
 }
 
 
 void PLUS::abstract_operation(list<string> arguments, Context &stack) {
 	
+	if (arguments.size() >= 2) 
+		throw Plus_lenght();
+	
 	if (arguments.size() >= 2) {
-		Plus_lenght e;
-		throw e;
-	}
-
-	if (arguments.size() >= 2) {
-		if (stack.count(*(arguments.begin())) == 0) {
-			Plus_argument err_one;
-			throw err_one;
-		}
+		if (stack.count(*(arguments.begin())) == 0) 
+			throw Plus_argument();
+		
 		if (arguments.size() == 3) {
-			if (stack.count(*(arguments.begin()++)) == 0) {
-				Plus_argument err_two;
-				throw err_two;
-			}
+			if (stack.count(*(arguments.begin()++)) == 0)
+				throw Plus_argument();
 		}
 	}
 	
@@ -85,21 +75,16 @@ void PLUS::abstract_operation(list<string> arguments, Context &stack) {
 }
 
 void MINUS::abstract_operation(list<string> arguments, Context &stack) {
-	if (arguments.size() > 2) {
-		Minus_lenght e;
-		throw e;
-	}
-
+	if (arguments.size() > 2) 
+		throw Minus_lenght();
+	
 	if (arguments.size() >= 1) {
-		if (stack.count(*(arguments.begin())) == 0) {
-			Minus_argument err_one;
-			throw err_one;
-		}
+		if (stack.count(*(arguments.begin())) == 0) 
+			throw Minus_argument();
+		
 		if (arguments.size() == 2) {
-			if (stack.count(*(arguments.begin()++)) == 0) {
-				Minus_argument err_two;
-				throw err_two;
-			}
+			if (stack.count(*(arguments.begin()++)) == 0)
+				throw Minus_argument();
 		}
 	}
 	
@@ -127,21 +112,17 @@ void MINUS::abstract_operation(list<string> arguments, Context &stack) {
 
 void MULTIPLY::abstract_operation(list<string> arguments, Context &stack) {
 	
-	if (arguments.size() > 2) {
-		Multiply_lenght e;
-		throw e;
-	}
+	if (arguments.size() > 2) 
+		throw Multiply_lenght();
+	
 
 	if (arguments.size() >= 1) {
-		if (stack.count(*(arguments.begin())) == 0) {
-			Multiply_argument err_one;
-			throw err_one;
-		}
+		if (stack.count(*(arguments.begin())) == 0) 
+			throw Multiply_argument();
+		
 		if (arguments.size() == 2) {
-			if (stack.count(*(arguments.begin()++)) == 0) {
-				Multiply_argument err_two;
-				throw err_two;
-			}
+			if (stack.count(*(arguments.begin()++)) == 0)
+				throw Multiply_argument();
 		}
 	}
 	
@@ -168,31 +149,23 @@ void MULTIPLY::abstract_operation(list<string> arguments, Context &stack) {
 }
 
 void DIVIDE::abstract_operation(list<string> arguments, Context &stack) {
-	if (arguments.size() > 2) {
-		Plus_lenght e;
-		throw e;
-	}
-
+	if (arguments.size() > 2)
+		throw Divide_lenght();
+	
 	if (arguments.size() >= 1) {
-		if (stack.count(*(arguments.begin())) == 0) {
-			Plus_argument err_one;
-			throw err_one;
-		}
+		if (stack.count(*(arguments.begin())) == 0)
+			throw Divide_argument();
+		
 		if (arguments.size() == 2) {
-			if (stack.count(*(arguments.begin()++)) == 0) {
-				Plus_argument err_two;
-				throw err_two;
-			}
-			if (*(arguments.begin()++) == "0") {
-				Divide_ByZero e;
-				throw e;
-			}
+			if (stack.count(*(arguments.begin()++)) == 0) 
+				throw Divide_argument();
+			
+			if (*(arguments.begin()++) == "0") 
+				throw Divide_ByZero();
 		}
 		else {
-			if (*(arguments.begin()) == "0") {
-				Divide_ByZero e;
-				throw e;
-			}
+			if (*(arguments.begin()) == "0") 
+				throw Divide_ByZero();
 		}
 	}
 	
@@ -226,16 +199,12 @@ void SQRT::abstract_operation(list<string> arguments, Context &stack) {
 	}
 
 	if (arguments.size() == 1) {
-		if (stack.count(*(arguments.begin())) == 0) {
-			Sqrt_argument e;
-			throw e;
-		}
+		if (stack.count(*(arguments.begin())) == 0) 
+			throw Sqrt_argument();
 	}
 	else {
-		if (stack.find_val(*(arguments.begin())) < 0) {
-			Sqrt_negative e;
-			throw e;
-		}
+		if (stack.find_val(*(arguments.begin())) < 0) 
+			throw Sqrt_negative();
 	}
 	
 	if (arguments.size() == 0)
@@ -245,20 +214,14 @@ void SQRT::abstract_operation(list<string> arguments, Context &stack) {
 }
 
 void PRINT::abstract_operation(list<string> arguments, Context &stack) {
-	if ((arguments.size() == 1) && ((stack.count(*(arguments.begin())) == 0))) {
-		Print_argument e;
-		throw e;
-	}
+	if ((arguments.size() == 1) && ((stack.count(*(arguments.begin())) == 0)))
+		throw Print_argument();
+	
+	if (arguments.size()>1) 
+		throw Print_lenght();
 
-	if (arguments.size()>1) {
-		Print_lenght e;
-		throw e;
-	}
-
-	if (stack.is_empty()) {
-		Print_empty e;
-		throw e;
-	}
+	if (stack.is_empty()) 
+		throw Print_empty();
 	
 	if (arguments.size() == 0)
 		cout << stack.top();
@@ -267,15 +230,12 @@ void PRINT::abstract_operation(list<string> arguments, Context &stack) {
 }
 
 void DEFINE::abstract_operation(list<string> arguments, Context &stack) {
-	if (arguments.size() != 2) {
-		Define_lenght e;
-		throw e;
-	}
+	if (arguments.size() != 2)
+		throw Define_lenght();
 
-	if (!is_number(*(arguments.begin()++))) {
-		Define_argument e;
-		throw e;
-	}
+	if (!is_number(*(arguments.begin()++))) 
+		throw Define_argument();
+	
 	stack.define_value(*(arguments.begin()), stof(*(++(arguments.begin()))));
 }
 
