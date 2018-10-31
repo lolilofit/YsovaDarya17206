@@ -14,7 +14,7 @@ public:
 
 	Create* factory_metod(string name);
     
-//	~Factory();
+	~Factory();
 };
 
 #endif 

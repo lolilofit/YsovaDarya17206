@@ -12,3 +12,10 @@ void Factory::init_cmd(string name, Create* operation) {
 Create* Factory::factory_metod(string name) {
 	return op.at(name);
 }
+
+Factory::~Factory() {
+	for (auto cur : op) {
+		delete(cur.second);
+		cur.second = nullptr;
+	}
+}

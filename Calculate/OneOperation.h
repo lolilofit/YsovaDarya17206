@@ -16,4 +16,4 @@ public:
 	virtual void abstract_operation(list<string> arguments, Context &stack) {};
 };
 
-#endif // !ONEOPERATION_H
+#endif 

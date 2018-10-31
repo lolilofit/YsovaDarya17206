@@ -224,9 +224,9 @@ void PRINT::abstract_operation(list<string> arguments, Context &stack) {
 		throw Print_empty();
 	
 	if (arguments.size() == 0)
-		cout << stack.top();
+		cout << stack.top()<<endl;
 	else
-		cout << stack.find_val(*(arguments.begin()));
+		cout << stack.find_val(*(arguments.begin())) << endl;
 }
 
 void DEFINE::abstract_operation(list<string> arguments, Context &stack) {
