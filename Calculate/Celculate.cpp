@@ -41,6 +41,6 @@ void Calculator::parse(string operation) {
 	}
 	catch (MyExceptions &e) {
 		cout << "cought an exception:" << e.what() << '\n';
-    	_getch();
+		return;
 	}
 }
