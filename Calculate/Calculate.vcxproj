@@ -129,7 +129,6 @@
     <ClInclude Include="Create.h" />
     <ClInclude Include="exeptions.h" />
     <ClInclude Include="Factory.h" />
-    <ClInclude Include="init.h" />
     <ClInclude Include="OneOperation.h" />
     <ClInclude Include="Operations.h" />
     <ClInclude Include="OperationsCreate.h" />

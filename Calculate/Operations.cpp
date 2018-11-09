@@ -1,8 +1,38 @@
 #include "Operations.h"
 #include<regex>
+#include "Create.h"
+#include "Factory.h"
 
+namespace {
 
-void Base::abstract_operation(list<string> arguments, Context &stack) {}
+	bool init() {
+
+		CreatePush* _push = new CreatePush();
+		CreatePop* _pop = new CreatePop();
+		CreatePlus* _plus = new CreatePlus();
+		CreateMinus* _minus = new CreateMinus();
+		CreateDivide* _divide = new CreateDivide();
+		CreateMultiply* _mult = new CreateMultiply();
+		CreateSqrt* _sqrt = new CreateSqrt();
+		CreatePrint* _print = new CreatePrint();
+		CreateDefine* _def = new CreateDefine();
+		CreateComment* _comment = new CreateComment();
+		Factory::get_instance().init_cmd("PUSH", _push);
+		Factory::get_instance().init_cmd("POP", _pop);
+		Factory::get_instance().init_cmd("+", _plus);
+		Factory::get_instance().init_cmd("-", _minus);
+		Factory::get_instance().init_cmd("/", _divide);
+		Factory::get_instance().init_cmd("*", _mult);
+		Factory::get_instance().init_cmd("SQRT", _sqrt);
+		Factory::get_instance().init_cmd("PRINT", _print);
+		Factory::get_instance().init_cmd("DEFINE", _def);
+		Factory::get_instance().init_cmd("#", _comment);
+
+		return true;
+	}
+	bool initial = init();
+}
+
 
 bool is_number(string val) {
 	regex num("[-]*""[0-9]*"".""[0-9]*");
@@ -193,10 +223,8 @@ void DIVIDE::abstract_operation(list<string> arguments, Context &stack) {
 
 void SQRT::abstract_operation(list<string> arguments, Context &stack) {
 	
-	if (arguments.size() > 1) {
-		Sqrt_lenght e;
-		throw e;
-	}
+	if (arguments.size() > 1) 
+		throw Sqrt_lenght();
 
 	if (arguments.size() == 1) {
 		if (stack.count(*(arguments.begin())) == 0) 

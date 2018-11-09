@@ -4,7 +4,7 @@
 
 class MyExceptions : std::exception {
 public:
-	virtual const char* what() const throw() { return "exeption happened"; }
+	virtual const char* what() const throw() { return "exeption happened: "; }
 };
 
 class Push_lenght : public MyExceptions {

@@ -56,9 +56,6 @@
     <ClInclude Include="Factory.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
-    <ClInclude Include="init.h">
-      <Filter>Файлы заголовков</Filter>
-    </ClInclude>
     <ClInclude Include="OperationsCreate.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>

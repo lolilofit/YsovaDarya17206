@@ -1,6 +1,7 @@
 #include "Celculate.h"
 #include "exeptions.h"
 #include<conio.h>
+#include<memory>
 
 void Calculator::read(istream& in) {
 	string operation;
@@ -33,10 +34,8 @@ void Calculator::parse(string operation) {
 		string name = *arguments.begin();
 		arguments.remove(*(arguments.begin()));
 
-		Operations *one = Factory::get_instance().factory_metod(name)->make();
+		std::auto_ptr< Operations > one (Factory::get_instance().factory_metod(name)->make());
 		one->abstract_operation(arguments, stack); 
-
-		delete(one);
 
 	}
 	catch (MyExceptions &e) {

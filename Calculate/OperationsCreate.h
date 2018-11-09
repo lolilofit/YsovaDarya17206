@@ -9,15 +9,11 @@
 
 using namespace std;
 
-class Base : public Operations {
-public:
-	void abstract_operation(list<string> arguments, Context &stack) override;
-};
 
 class Create {
 
 public:
-	virtual Operations* make() { return (new Base()); };
+	virtual Operations* make() = 0;
 };
 
 
