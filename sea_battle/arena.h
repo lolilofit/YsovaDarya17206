@@ -35,16 +35,39 @@ public:
 		second->init_field();
 	}
 
-	void turn(int _gamer) {
+	void turn(int &_gamer) {
+		int res;
 		ConsoleView painter;
+		std::vector<int> set_this;
+		set_this.resize(2);
 
 		if (!(_gamer % 2)) {
 			painter.draw("attack!", first->field_for_draw(), turns_one);
-			first->attack(turns_one, *second);
+			set_this = first->attack(turns_one);
+
+			res = second->is_ship(set_this[0], set_this[1]);
+			if (res == 1)
+				turns_one[set_this[0]][set_this[1]] = 2;
+			if (res == 2) {
+					turns_one[set_this[0]][set_this[1]] = 2;
+					_gamer++;
+			}
+			if(res==0)
+				turns_one[set_this[0]][set_this[1]] = 1;
+			
 		}
 		else {
 			painter.draw("attack!", second->field_for_draw(), turns_two);
-			second->attack(turns_two, *first);
+			set_this = second->attack(turns_two);
+
+			res = first->is_ship(set_this[0], set_this[1]);
+			if (res != 0) {
+				turns_two[set_this[0]][set_this[1]] = 2;
+				_gamer++;
+			}
+			if(res == 0)
+				turns_two[set_this[0]][set_this[1]] = 1;
+			
 		}
 	}
 
