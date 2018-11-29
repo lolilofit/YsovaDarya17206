@@ -141,7 +141,7 @@ public:
 
 class OptimalGamer : public Gamer {
 	std::vector<int> palubs;
-	int cur_x = 3, cur_y = 0, cur_ship_x = 3, cur_ship_y = 0, ship_left = cur_x, ship_right = cur_x, ship_down = cur_y, ship_up = cur_y;
+	int cur_x = 3, cur_y = 0, cur_ship_x = 3, cur_ship_y = 0, ship_left = cur_x-1, ship_right = cur_x+1, ship_down = cur_y-1, ship_up = cur_y+1;
 	
 	std::list<std::list<int>> free_place(int field_orientation, int side, int pal) {
 		std::list<std::list<int>> free_cells;
@@ -196,29 +196,33 @@ class OptimalGamer : public Gamer {
 	void next_turn(int pal, std::vector<std::vector<int>> &my_turns) {
 
 		int k = 0;
-		palubs[std::max(ship_right - ship_left - 1, ship_up - ship_down - 1)]++;
-		while (palubs.at(k) != 0) {
-			pal = 4 - k;
+		palubs[4 - std::max(ship_right - ship_left - 1, ship_up - ship_down - 1)]++;
+		while (palubs.at(k) == k+1) {
 			k++;
+			pal = 4 - k;
 		}
 		if (std::max(ship_right - ship_left - 1, ship_up - ship_down -1) == pal) {
-			cur_x = 0;
+			cur_x = pal-1;
 			cur_y = 0;
-			while (my_turns[cur_x][cur_y] != Hit::no) {
+			while (can_set(cur_x, cur_y, 1, 1, my_turns)) {
 				cur_y += (cur_y++) / 10;
 				cur_x = (cur_x++) % 10;
 			}
 		}
 		else {
-			cur_x = (cur_x + pal) % 10;
 			cur_y += (cur_x + pal) / 10;
-			while (my_turns[cur_x][cur_y] != Hit::no) {
-				cur_y += (cur_x++) / 10;
-				cur_x = (cur_x++) % 10;
+			cur_x = (cur_x + pal) % 10;
+			while (can_set(cur_x, cur_y, 1, 1, my_turns)) {
+				cur_y += (cur_x+1) / 10;
+				cur_x = (cur_x+1) % 10;
 			}
 		}
 		cur_ship_x = cur_x;
 		cur_ship_y = cur_y;
+		ship_down = cur_ship_y -1;
+		ship_up = cur_ship_y+1;
+		ship_down = cur_ship_x - 1;
+		ship_right = cur_ship_x + 1;
 
 	}
 
@@ -251,31 +255,55 @@ public:
 				if ((cur_ship_x-1 >= 0) && (my_turns[cur_ship_x-1][cur_ship_y] == Hit::no))
 					cur_ship_x--;
 				else {
-					if (((cur_ship_x-1 < 0) || (cur_ship_x+1 <= 9))&&(my_turns[cur_ship_x+1][cur_ship_y] == Hit::no))
-						cur_ship_x++;
+					if ((cur_ship_x - 1 < 0) || (my_turns[cur_ship_x - 1][cur_ship_y] == Hit::no)) {
+						if (my_turns[cur_ship_x - 1][cur_ship_y] != Hit::no) {
+							ship_left = cur_ship_x - 1;
+							cur_ship_x = cur_x + 1;
+						}
+					}
 					else {
-						if ((cur_ship_y-1 >= 0) && (my_turns[cur_ship_x][cur_ship_y-1] == Hit::no))
-							cur_ship_y--;
-						else {						  
-							if (((cur_ship_y-1 < 0)||(cur_ship_y+1 <=9)) && (my_turns[cur_ship_x][cur_ship_y+1] == Hit::no))
-								cur_ship_y++;
+						if ((cur_ship_x + 1 <= 9) && (my_turns[cur_ship_x + 1][cur_ship_y] == Hit::no))
+							cur_ship_x++;
+						else {
+							if (((cur_ship_x + 1 > 9) || (my_turns[cur_ship_x + 1][cur_ship_y] == Hit::touched))&&(cur_ship_y == cur_y)) {
+								ship_right = 10;
+								cur_ship_x = cur_x;
+								if (cur_ship_y - 1 >= 0)
+									cur_ship_y--;
+								else
+									cur_ship_y++;
+							}
 							else {
-								next_turn(pal, my_turns);
+								if ((cur_ship_y - 1 >= 0) && (my_turns[cur_ship_x][cur_ship_y - 1] == Hit::no))
+									cur_ship_y--;
+								else {
+									if ((cur_ship_y - 1 < 0) || (my_turns[cur_ship_x][cur_ship_y - 1] == Hit::touched)) {
+										ship_down = cur_ship_y - 1;
+										cur_ship_y = cur_y + 1;
+									}
+									else {
+										if ((cur_ship_y + 1 <= 9) && (my_turns[cur_ship_x][cur_ship_y + 1] == Hit::no))
+											cur_ship_y++;
+										else {
+											ship_up = 10;
+											next_turn(pal, my_turns);
+										}
+									}
+								}
 							}
 						}
 					}
 				}
-				
 			}
 			else {
 				if ((cur_x == cur_ship_x) && (cur_ship_y == cur_y)) {
-			
+                    			
 					if (my_turns[pal - 1][0] == 1) {
 						cur_y += (cur_x + pal) / 10;
 						cur_x = (cur_x + pal) % 10;
 					}
 					
-					while (my_turns[cur_x][cur_y] != Hit::no) {
+					while (can_set(cur_x, cur_y, 1, 1, my_turns)) {
 						cur_y += (cur_y++) / 10;
 						cur_x = (cur_x++) % 10;
 					}
@@ -291,14 +319,7 @@ public:
 							my_turns[cur_ship_x][cur_ship_y-1] = Hit::touched;
 						if (cur_ship_y+1 <= 9)
 							my_turns[cur_ship_x][cur_ship_y+1] = Hit::touched;
-				//		if (cur_ship_x-1 >= 0) {
-							//my_turns[cur_ship_x-1][cur_ship_y] = Hit::touched;
-			//				if (cur_ship_y-1 >= 0)
-			//					my_turns[cur_ship_x-1][cur_ship_y-1] = Hit::touched;
-			//				if (cur_ship_y+1 <= 9)
-			//					my_turns[cur_ship_x-1][cur_ship_y+1] = Hit::touched;
-			//			}
-
+				
 						ship_left = cur_ship_x;
 						if (cur_x+1 <= 9)
 							cur_ship_x = cur_x+1;
@@ -308,6 +329,7 @@ public:
 								cur_ship_y--;
 							}
 							else {
+
 								cur_ship_x = cur_x;
 								cur_ship_y+1;
 							}
@@ -319,14 +341,7 @@ public:
 								my_turns[cur_ship_x][cur_ship_y-1] = Hit::touched;
 							if (cur_ship_y+1 <= 9)
 								my_turns[cur_ship_x][cur_ship_y+1] = Hit::touched;
-				/*			if (cur_ship_x+1 <= 9) {
-								//my_turns[cur_ship_x+1][cur_ship_y] = Hit::touched;
-								if (cur_ship_y-1 >= 0)
-									my_turns[cur_ship_x+1][cur_ship_y-1] = Hit::touched;
-								if (cur_ship_y+1 <= 9)
-									my_turns[cur_ship_x+1][cur_ship_y+1] = Hit::touched;
-							}
-							*/
+			
 							ship_right = cur_ship_x;
 							cur_ship_x = cur_x;
 
@@ -345,13 +360,13 @@ public:
 									my_turns[cur_ship_x-1][cur_ship_y] = Hit::touched;
 								if (cur_ship_x+1 <= 9)
 									my_turns[cur_ship_x+1][cur_ship_y] = Hit::touched;
-								if (cur_ship_y-1 >= 0) {
-									my_turns[cur_ship_x][cur_ship_y-1] = Hit::touched;
-									if (cur_ship_x-1 >= 0)
-										my_turns[cur_ship_x-1][cur_ship_y-1] = Hit::touched;
-									if (cur_ship_x+1 <= 9)
-										my_turns[cur_ship_x+1][cur_ship_y-1] = Hit::touched;
-								}
+		//						if (cur_ship_y-1 >= 0) {
+		//							my_turns[cur_ship_x][cur_ship_y-1] = Hit::touched;
+		//							if (cur_ship_x-1 >= 0)
+		//								my_turns[cur_ship_x-1][cur_ship_y-1] = Hit::touched;
+		//							if (cur_ship_x+1 <= 9)
+		//								my_turns[cur_ship_x+1][cur_ship_y-1] = Hit::touched;
+		//						}
 
 								ship_down = cur_ship_y;
 								if (cur_y+1 <= 9)
@@ -367,13 +382,13 @@ public:
 									my_turns[cur_ship_x-1][cur_ship_y] = Hit::touched;
 								if (cur_ship_x+1 <= 9)
 									my_turns[cur_ship_x+1][cur_ship_y] = Hit::touched;
-								if (cur_ship_y-1 >= 0) {
-									my_turns[cur_ship_x][cur_ship_y+1] = Hit::touched;
-									if (cur_ship_x-1 >= 0)
-										my_turns[cur_ship_x-1][cur_ship_y+1] = Hit::touched;
-									if (cur_ship_x+1 <= 9)
-										my_turns[cur_ship_x+1][cur_ship_y+1] = Hit::touched;
-								}
+				//				if (cur_ship_y-1 >= 0) {
+				//					my_turns[cur_ship_x][cur_ship_y+1] = Hit::touched;
+				//					if (cur_ship_x-1 >= 0)
+				//						my_turns[cur_ship_x-1][cur_ship_y+1] = Hit::touched;
+				//					if (cur_ship_x+1 <= 9)
+				//						my_turns[cur_ship_x+1][cur_ship_y+1] = Hit::touched;
+				//				}
 
 								ship_up = cur_ship_y;
 								next_turn(pal, my_turns);
