@@ -11,9 +11,10 @@
 #include<fstream>
 #include<string.h>
 #include<list>
+#include<conio.h>
 #include<algorithm>
 #include"optionparser.h"
-
+#include "console_view.h"
 
 enum Orientation : int { vertical = 0, horizontal = 1 };
 enum Hit : int { no = 0, touched = 1, killed = 2 };
@@ -172,16 +173,16 @@ class OptimalGamer : public Gamer {
 		}
 
 		std::list<int> place;
-		for (int i = left; i <= right; i++) {
-			for (int j = up; j <= down; j++) {
-				if (!(can_set(i+1, j, pal, Orientation::horizontal, field))) {
+		for (int i = left+1; i <= right; i++) {
+			for (int j = up + 1; j <= down; j++) {
+				if (!(can_set(i+1, j, 2, Orientation::horizontal, field))) {
 					place.clear();
 					place.push_back(i);
 					place.push_back(j);
 					place.push_back(Orientation::horizontal);
 					free_cells.push_back(place);
 				}
-				if (!(can_set(i, j, pal, Orientation::vertical, field))) {
+				if (!(can_set(i, j, 2, Orientation::vertical, field))) {
 					place.clear();
 					place.push_back(i);
 					place.push_back(j);
@@ -196,25 +197,38 @@ class OptimalGamer : public Gamer {
 	void next_turn(int pal, std::vector<std::vector<int>> &my_turns) {
 
 		int k = 0;
+		int h = std::max(ship_right - ship_left - 1, ship_up - ship_down - 1);
 		palubs[4 - std::max(ship_right - ship_left - 1, ship_up - ship_down - 1)]++;
-		while (palubs.at(k) == k+1) {
-			k++;
+
+		if (std::max(ship_right - ship_left - 1, ship_up - ship_down -1) == pal) {	
+			while ((palubs.at(k) == k + 1)&&(k<4)) {
+				k++;
+				pal = 4 - k;
+			}
 			pal = 4 - k;
-		}
-		if (std::max(ship_right - ship_left - 1, ship_up - ship_down -1) == pal) {
+
 			cur_x = pal-1;
 			cur_y = 0;
-			while (can_set(cur_x, cur_y, 1, 1, my_turns)) {
-				cur_y += (cur_y++) / 10;
-				cur_x = (cur_x++) % 10;
+			while (my_turns[cur_x][cur_y] != Hit::no) {
+				cur_y += (cur_x + pal) / 10;
+				if (pal != 1)
+					cur_x = (!((cur_x + pal) / 10))*(cur_x + pal) + ((cur_x + pal) / 10)*(pal - 1 - cur_y % pal);
+				else
+					cur_x = (cur_x + 1) % 10;
 			}
 		}
 		else {
 			cur_y += (cur_x + pal) / 10;
-			cur_x = (cur_x + pal) % 10;
-			while (can_set(cur_x, cur_y, 1, 1, my_turns)) {
-				cur_y += (cur_x+1) / 10;
-				cur_x = (cur_x+1) % 10;
+			if(pal!=1)
+			cur_x = (!((cur_x + pal) / 10))*(cur_x + pal) + ((cur_x + pal) / 10)*(pal-1 - cur_y%pal);
+			else
+				cur_x = (cur_x + 1) % 10;
+			while (my_turns[cur_x][cur_y] != Hit::no) {
+				cur_y += (cur_x + pal) / 10;
+				if(pal!=1)
+				cur_x = (!((cur_x + pal) / 10))*(cur_x + pal) + ((cur_x + pal) / 10)*(pal-1- cur_y%pal);
+				else
+					cur_x = (cur_x + 1) % 10;
 			}
 		}
 		cur_ship_x = cur_x;
@@ -233,10 +247,13 @@ public:
 		set_this.resize(4);
 
 		palubs.resize(4);
-		while (palubs.at(k) != 0) {
-			pal = 4 - k;
+		
+		while ((palubs.at(k) == k+1)&&(k<4)) {
 			k++;
+			pal = 4 - k;
 		}
+		pal = 4 - k;
+		
 
 	    if (my_turns[cur_ship_x][cur_ship_y] == Hit::killed) {
 				if (cur_ship_x != cur_x) {
@@ -255,29 +272,47 @@ public:
 				if ((cur_ship_x-1 >= 0) && (my_turns[cur_ship_x-1][cur_ship_y] == Hit::no))
 					cur_ship_x--;
 				else {
-					if ((cur_ship_x - 1 < 0) || (my_turns[cur_ship_x - 1][cur_ship_y] == Hit::no)) {
-						if (my_turns[cur_ship_x - 1][cur_ship_y] != Hit::no) {
+					if (((cur_ship_x - 1 < 0) || (my_turns[cur_ship_x - 1][cur_ship_y] == Hit::touched))&&(cur_y == cur_ship_y)) {
+				
 							ship_left = cur_ship_x - 1;
+							if(cur_x+1<=9)
 							cur_ship_x = cur_x + 1;
-						}
+							else {
+								ship_right = 10;
+								cur_ship_x = cur_x;
+								if (cur_ship_y - 1 >= 0)
+									cur_ship_y--;
+								else {
+									ship_down = cur_y - 1;
+									if(cur_ship_y+1<=9)
+									cur_ship_y++;
+									else {
+										ship_up = cur_ship_y + 1;
+										next_turn(pal, my_turns);
+									}
+								}
+							}				
 					}
 					else {
 						if ((cur_ship_x + 1 <= 9) && (my_turns[cur_ship_x + 1][cur_ship_y] == Hit::no))
 							cur_ship_x++;
 						else {
 							if (((cur_ship_x + 1 > 9) || (my_turns[cur_ship_x + 1][cur_ship_y] == Hit::touched))&&(cur_ship_y == cur_y)) {
-								ship_right = 10;
+								
+								 ship_right = cur_ship_x+1;
 								cur_ship_x = cur_x;
 								if (cur_ship_y - 1 >= 0)
 									cur_ship_y--;
-								else
+								else {
+									ship_down = cur_y - 1;
 									cur_ship_y++;
+								}
 							}
 							else {
 								if ((cur_ship_y - 1 >= 0) && (my_turns[cur_ship_x][cur_ship_y - 1] == Hit::no))
 									cur_ship_y--;
 								else {
-									if ((cur_ship_y - 1 < 0) || (my_turns[cur_ship_x][cur_ship_y - 1] == Hit::touched)) {
+									if (((cur_ship_y - 1 < 0) || (my_turns[cur_ship_x][cur_ship_y - 1] == Hit::touched))&&(cur_x == cur_ship_x)) {
 										ship_down = cur_ship_y - 1;
 										cur_ship_y = cur_y + 1;
 									}
@@ -285,7 +320,8 @@ public:
 										if ((cur_ship_y + 1 <= 9) && (my_turns[cur_ship_x][cur_ship_y + 1] == Hit::no))
 											cur_ship_y++;
 										else {
-											ship_up = 10;
+									
+											 ship_up = cur_ship_y+1;
 											next_turn(pal, my_turns);
 										}
 									}
@@ -300,12 +336,18 @@ public:
                     			
 					if (my_turns[pal - 1][0] == 1) {
 						cur_y += (cur_x + pal) / 10;
-						cur_x = (cur_x + pal) % 10;
+						if(pal!=1)
+						cur_x = (!((cur_x + pal) / 10))*(cur_x + pal) + ((cur_x + pal) / 10)*(pal- 1 - cur_y%pal);
+						else
+							cur_x = (cur_x + 1) % 10;
 					}
 					
-					while (can_set(cur_x, cur_y, 1, 1, my_turns)) {
-						cur_y += (cur_y++) / 10;
-						cur_x = (cur_x++) % 10;
+					while (my_turns[cur_x][cur_y] != Hit::no) {
+						cur_y += (cur_x + pal) / 10;
+						if(pal != 1)
+						cur_x = (!((cur_x + pal) / 10))*(cur_x + pal) + ((cur_x + pal) / 10)*(pal- 1 - cur_y%pal);
+						else
+							cur_x = (cur_x + 1) % 10;
 					}
 					cur_ship_x = cur_x;
 					cur_ship_y = cur_y;
@@ -360,14 +402,7 @@ public:
 									my_turns[cur_ship_x-1][cur_ship_y] = Hit::touched;
 								if (cur_ship_x+1 <= 9)
 									my_turns[cur_ship_x+1][cur_ship_y] = Hit::touched;
-		//						if (cur_ship_y-1 >= 0) {
-		//							my_turns[cur_ship_x][cur_ship_y-1] = Hit::touched;
-		//							if (cur_ship_x-1 >= 0)
-		//								my_turns[cur_ship_x-1][cur_ship_y-1] = Hit::touched;
-		//							if (cur_ship_x+1 <= 9)
-		//								my_turns[cur_ship_x+1][cur_ship_y-1] = Hit::touched;
-		//						}
-
+		
 								ship_down = cur_ship_y;
 								if (cur_y+1 <= 9)
 									cur_ship_y = cur_y+1;
@@ -382,14 +417,7 @@ public:
 									my_turns[cur_ship_x-1][cur_ship_y] = Hit::touched;
 								if (cur_ship_x+1 <= 9)
 									my_turns[cur_ship_x+1][cur_ship_y] = Hit::touched;
-				//				if (cur_ship_y-1 >= 0) {
-				//					my_turns[cur_ship_x][cur_ship_y+1] = Hit::touched;
-				//					if (cur_ship_x-1 >= 0)
-				//						my_turns[cur_ship_x-1][cur_ship_y+1] = Hit::touched;
-				//					if (cur_ship_x+1 <= 9)
-				//						my_turns[cur_ship_x+1][cur_ship_y+1] = Hit::touched;
-				//				}
-
+				
 								ship_up = cur_ship_y;
 								next_turn(pal, my_turns);
 
@@ -406,17 +434,24 @@ public:
 			return set_this;
 	}
 
+	int mistake(int x, int y) {
+		if ((x >= 0) && (x <= 9) && (y >= 0) && (y <= 9))
+			return 0;
+		else
+			return 1;
+	}
+
 	void init_field() override {
 		int orientation = rand() % 2;
 		int side, res = 1, x_right, x_left, y_down, y_up;
-		
+
+
 		for (int pal = 4; pal > 2; pal--) {
 			for (int ships_count = 0; ships_count < 5 - pal; ships_count++) {
 				while (res) {
 					side = rand() % 2;
 					orientation = rand() % 2;
-					//side = 0;
-					//orientation = 0;
+		
 					if (orientation == Orientation::horizontal) {
 						x_right = rand() % 10;
 						x_left = x_right - pal + 1;
@@ -460,23 +495,26 @@ public:
 			free_cells = free_place(orientation, side, 2);
 			if (free_cells.size() != 0) {
 				const int _size = free_cells.size();
-				int ind = rand() % _size;
-				auto cur_cells = free_cells.begin();
-				while (ind > 0) {
-					++cur_cells;
-					ind--;
+				int _res = 1;
+				while (_res) {
+					int ind = rand() % _size;
+					auto cur_cells = free_cells.begin();
+					while (ind > 0) {
+						++cur_cells;
+						ind--;
+					}
+					auto cur = (*cur_cells).begin();
+					x = *cur;
+					++cur;
+					y = *cur;
+					++cur;
+					ship_orientation = *cur;
+					_res = mistake(x, y);
 				}
-				auto cur = (*cur_cells).begin();
-				x = *cur;
-				++cur;
-				y = *cur;
-				++cur;
-				ship_orientation = *cur;
-
 			}
 			else {
 				int res = 1;
-				while (res) {
+				while ((res)||(x-1<0)||(x>9)||(y<0)||(y+1>9)) {
 					x = rand() % 10;
 					y = rand() % 10;
 					ship_orientation = rand() % 2;
@@ -485,7 +523,8 @@ public:
 				free_cells.clear();
 			}
 
-			field[x][y] = IsShip::yes;
+
+			field[x][y] = 1;
 			if (orientation == 1)
 				x--;
 			else
@@ -494,10 +533,14 @@ public:
 		}
 
 		for (int i = 0; i < 4; i++) {
+			int _res = 1;
 			int x = rand() % 10;
 			int y = rand() % 10;
-			if (!(res = can_set(x, y, 1, Orientation::horizontal, field)))
-				field[x][y] = IsShip::yes;
+			while (can_set(x, y, 1, Orientation::horizontal, field)) {
+				x = rand() % 10;
+				y = rand() % 10;
+			}
+				field[x][y] = 1;
 		}
 
 	}
