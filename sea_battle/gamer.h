@@ -21,11 +21,10 @@ enum Hit : int { no = 0, touched = 1, killed = 2 };
 enum IsShip : int { no_ship = 0, yes = 1 };
 
 class Gamer {
-protected:
-	std::vector<std::vector<int>> field;
+
 
 public:
-	//äåêîíñòðóêòîð
+	std::vector<std::vector<int>> field;
 	Gamer() {
 		int _size;
 		field.resize(10);
@@ -35,61 +34,8 @@ public:
 	}
 	virtual std::vector<int> attack(std::vector<std::vector<int>> &my_turns) = 0;
 	virtual void init_field() {}
-
-	int is_ship(int x, int y) {
-		int left = x, right = x, up = y, down = y;
-		if (field[x][y] == IsShip::yes) {
-			while (1) {
-				if ((left> 0) && ((y + 1>9) || (field[left][y + 1] == 0)) && ((y - 1<0) || (field[left][y - 1] == 0)) && (field[left][y] != 0)) {
-					left--;
-					if (field[left][y] == IsShip::yes)
-						return 1;
-				}
-				else {
-					if ((right < 9) && ((y + 1>9) || (field[right][y + 1] == 0)) && ((y - 1<0) || (field[right][y - 1] == 0)) && (field[right][y] != 0)) {
-						right++;
-						if (field[right][y] == IsShip::yes)
-							return 1;
-					}
-					else {
-						if ((down> 0) && ((x + 1>9) || (field[x + 1][down] == 0)) && ((x - 1<0) || (field[x - 1][down] == 0)) && (field[x][down] != 0)) {
-							down--;
-							if (field[x][down] == IsShip::yes)
-								return 1;
-						}
-						else {
-							if ((up < 9) && ((x + 1 > 9) || (field[x + 1][up] == 0)) && ((x - 1 < 0) || (field[x - 1][up] == 0)) && (field[x][up] != 0)) {
-								up++;
-								if (field[x][up] == IsShip::yes)
-									return 1;
-							}
-							else
-								return 2;
-						}
-					}
-				}
-			}
-		}
-
-		return 0;
-	}
-
-	std::vector<std::vector<int>> field_for_draw() {
-		return field;
-	}
-
-	int num_ships(std::vector<std::vector<int>> my_turns) {
-		int count = 0;
-		for (int i = 0; i < 10; i++) {
-			for (int j = 0; j < 10; j++) {
-				if (my_turns[i][j] == Hit::killed) //ïîäáèò
-					count++;
-			}
-		}
-
-		return count;
-	}
-
+	
+	
 	bool can_set(int x, int y, int num_palubs, int orientatation, std::vector<std::vector<int>> _field) {
 		int left, right, up, down, shift_x = 1, shift_y = 1;
 		if (x == 9) {
@@ -140,9 +86,16 @@ public:
 
 };
 
+
 class OptimalGamer : public Gamer {
 	std::vector<int> palubs;
 	int cur_x = 3, cur_y = 0, cur_ship_x = 3, cur_ship_y = 0, ship_left = cur_x - 1, ship_right = cur_x + 1, ship_down = cur_y - 1, ship_up = cur_y + 1;
+	int mistake(int x, int y) {
+		if ((x >= 0) && (x <= 9) && (y >= 0) && (y <= 9))
+			return 0;
+		else
+			return 1;
+	}
 
 	std::list<std::list<int>> free_place(int field_orientation, int side, int pal) {
 		std::list<std::list<int>> free_cells;
@@ -193,7 +146,7 @@ class OptimalGamer : public Gamer {
 		}
 		return free_cells;
 	}
-
+	
 	void next_turn(int pal, std::vector<std::vector<int>> &my_turns) {
 
 		int k = 0;
@@ -209,12 +162,14 @@ class OptimalGamer : public Gamer {
 
 			cur_x = pal - 1;
 			cur_y = 0;
+			mistake(cur_x, cur_y);
 			while (my_turns[cur_x][cur_y] != Hit::no) {
 				cur_y += (cur_x + pal) / 10;
 				if (pal != 1)
 					cur_x = (!((cur_x + pal) / 10))*(cur_x + pal) + ((cur_x + pal) / 10)*(pal - 1 - cur_y % pal);
 				else
 					cur_x = (cur_x + 1) % 10;
+				mistake(cur_x, cur_y);
 			}
 		}
 		else {
@@ -223,12 +178,14 @@ class OptimalGamer : public Gamer {
 				cur_x = (!((cur_x + pal) / 10))*(cur_x + pal) + ((cur_x + pal) / 10)*(pal - 1 - cur_y % pal);
 			else
 				cur_x = (cur_x + 1) % 10;
+			mistake(cur_x, cur_y);
 			while (my_turns[cur_x][cur_y] != Hit::no) {
 				cur_y += (cur_x + pal) / 10;
 				if (pal != 1)
 					cur_x = (!((cur_x + pal) / 10))*(cur_x + pal) + ((cur_x + pal) / 10)*(pal - 1 - cur_y % pal);
 				else
 					cur_x = (cur_x + 1) % 10;
+				mistake(cur_x, cur_y);
 			}
 		}
 		cur_ship_x = cur_x;
@@ -344,6 +301,7 @@ public:
 		else {
 			if ((cur_x == cur_ship_x) && (cur_ship_y == cur_y)) {
 
+				mistake(cur_x, cur_y);
 				if (my_turns[pal - 1][0] == 1) {
 					cur_y += (cur_x + pal) / 10;
 					if (pal != 1)
@@ -351,13 +309,14 @@ public:
 					else
 						cur_x = (cur_x + 1) % 10;
 				}
-
+				mistake(cur_x, cur_y);
 				while (my_turns[cur_x][cur_y] != Hit::no) {
 					cur_y += (cur_x + pal) / 10;
 					if (pal != 1)
 						cur_x = (!((cur_x + pal) / 10))*(cur_x + pal) + ((cur_x + pal) / 10)*(pal - 1 - cur_y % pal);
 					else
 						cur_x = (cur_x + 1) % 10;
+					mistake(cur_x, cur_y);
 				}
 				cur_ship_x = cur_x;
 				cur_ship_y = cur_y;
@@ -450,12 +409,7 @@ public:
 		return set_this;
 	}
 
-	int mistake(int x, int y) {
-		if ((x >= 0) && (x <= 9) && (y >= 0) && (y <= 9))
-			return 0;
-		else
-			return 1;
-	}
+	
 
 	void init_field() override {
 		int orientation = rand() % 2;
