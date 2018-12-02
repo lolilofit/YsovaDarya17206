@@ -9,16 +9,23 @@
 #include"create.h"
 
 class Arena {
+	int count_kills(std::vector<std::vector<int>> my_turns) {
+		int count = 0;
+		for (int i = 0; i < 10; i++) {
+			for (int j = 0; j < 10; j++) {
+				if (my_turns[i][j] == 2)
+					count++;
+			}
+		}
+
+		return count;
+	}
 
 public:
 	std::vector<std::vector<int>> turns_one;
 	std::vector<std::vector<int>> turns_two;
-	Gamer* first;
-	Gamer* second;
-
-	Arena() = default;
-	Arena(std::string name_one, std::string name_two) {
-		srand(time(0));
+	
+	Arena() {
 		turns_one.resize(10);
 		for (int i = 0, _size = turns_one.size(); i < _size; i++) {
 			turns_one[i].resize(10);
@@ -29,55 +36,41 @@ public:
 			turns_two[i].resize(10);
 		}
 
-		first = factory::get_instance().read(name_one)->make();
-		first->init_field();
-		second = factory::get_instance().read(name_two)->make();
-		second->init_field();
 	}
 
-	void turn(int &_gamer) {
-		int res;
-		ConsoleView painter;
+	std::vector<std::vector<int>> get_field(int count) {
+		if (count % 2)
+			return turns_one;
+		else
+			return turns_two;
+	}
+
+	std::vector<int> turn(int &_gamer, Gamer *player) {
+		
 		std::vector<int> set_this;
 		set_this.resize(2);
 
-		if (!(_gamer % 2)) {
-			painter.draw("attack!", first->field_for_draw(), turns_one);
-			set_this = first->attack(turns_one);
-
-			res = second->is_ship(set_this[0], set_this[1]);
-			if (res == 1)
-				turns_one[set_this[0]][set_this[1]] = 2;
-			if (res == 2) {
-					turns_one[set_this[0]][set_this[1]] = 2;
-					_gamer++;
-			}
-			if(res==0)
-				turns_one[set_this[0]][set_this[1]] = 1;
-			
-		}
-		else {
-			painter.draw("attack!", second->field_for_draw(), turns_two);
-			set_this = second->attack(turns_two);
-
-			res = first->is_ship(set_this[0], set_this[1]);
-			if (res != 0) {
-				turns_two[set_this[0]][set_this[1]] = 2;
-				_gamer++;
-			}
-			if(res == 0)
-				turns_two[set_this[0]][set_this[1]] = 1;
-			
-		}
+		if(_gamer%2 == 0)
+		  set_this = player->attack(turns_one);
+		else
+			set_this = player->attack(turns_two);
+		return set_this;
 	}
 
 	int num_ships() {
-		if (first->num_ships(turns_one) >= 20)
+		if (count_kills(turns_one) >= 20)
 			return 1;
-		if (second->num_ships(turns_two) >= 20)
+		if (count_kills(turns_two) >= 20)
 			return 2;
 		return 0;
 
+	}
+	
+	void hit(int count, std::vector<int> set_this, int val) {
+		if (count % 2 == 0)
+			turns_one[set_this[0]][set_this[1]] = val;
+		else
+		    turns_two[set_this[0]][set_this[1]] = val;
 	}
 
 	~Arena() {
