@@ -18,14 +18,14 @@
 
 enum Orientation : int { vertical = 0, horizontal = 1 };
 enum Hit : int { no = 0, touched = 1, killed = 2 };
-enum IsShip : int {no_ship = 0, yes = 1};
+enum IsShip : int { no_ship = 0, yes = 1 };
 
 class Gamer {
 protected:
 	std::vector<std::vector<int>> field;
-	
+
 public:
-	//äåêîíñòðóêòîð
+	//Ã¤Ã¥ÃªÃ®Ã­Ã±Ã²Ã°Ã³ÃªÃ²Ã®Ã°
 	Gamer() {
 		int _size;
 		field.resize(10);
@@ -37,28 +37,28 @@ public:
 	virtual void init_field() {}
 
 	int is_ship(int x, int y) {
-		int left = x, right = x, up=y, down=y;
+		int left = x, right = x, up = y, down = y;
 		if (field[x][y] == IsShip::yes) {
 			while (1) {
-				if ((left> 0)&&((y+1>9)||(field[left][y+1] == 0))&&((y-1<0)||(field[left][y-1]==0))&&(field[left][y] != 0)) {
+				if ((left> 0) && ((y + 1>9) || (field[left][y + 1] == 0)) && ((y - 1<0) || (field[left][y - 1] == 0)) && (field[left][y] != 0)) {
 					left--;
 					if (field[left][y] == IsShip::yes)
 						return 1;
-			    }
+				}
 				else {
-					if ((right < 9) && ((y+1>9)||(field[right][y + 1] == 0)) && ((y-1<0)||(field[right][y- 1] == 0))&&(field[right][y] != 0)) {
+					if ((right < 9) && ((y + 1>9) || (field[right][y + 1] == 0)) && ((y - 1<0) || (field[right][y - 1] == 0)) && (field[right][y] != 0)) {
 						right++;
 						if (field[right][y] == IsShip::yes)
 							return 1;
 					}
 					else {
-						if ((down> 0) && ((x+1>9)||(field[x+1][down] == 0)) && ((x-1<0)||(field[x-1][down] == 0))&& (field[x][down] != 0)) {
+						if ((down> 0) && ((x + 1>9) || (field[x + 1][down] == 0)) && ((x - 1<0) || (field[x - 1][down] == 0)) && (field[x][down] != 0)) {
 							down--;
 							if (field[x][down] == IsShip::yes)
 								return 1;
 						}
 						else {
-							if ((up < 9) && ((x + 1 > 9) || (field[x + 1][up] == 0)) && ((x - 1 < 0) || (field[x - 1][up] == 0))&& (field[x][up] != 0)) {
+							if ((up < 9) && ((x + 1 > 9) || (field[x + 1][up] == 0)) && ((x - 1 < 0) || (field[x - 1][up] == 0)) && (field[x][up] != 0)) {
 								up++;
 								if (field[x][up] == IsShip::yes)
 									return 1;
@@ -70,7 +70,7 @@ public:
 				}
 			}
 		}
-		
+
 		return 0;
 	}
 
@@ -82,7 +82,7 @@ public:
 		int count = 0;
 		for (int i = 0; i < 10; i++) {
 			for (int j = 0; j < 10; j++) {
-				if (my_turns[i][j] == Hit::killed) //ïîäáèò
+				if (my_turns[i][j] == Hit::killed) //Ã¯Ã®Ã¤Ã¡Ã¨Ã²
 					count++;
 			}
 		}
@@ -101,7 +101,7 @@ public:
 		}
 		else down = y - 1;
 
-		if (orientatation ==Orientation::horizontal)
+		if (orientatation == Orientation::horizontal)
 			shift_x = num_palubs;
 		else shift_y = num_palubs;
 
@@ -142,12 +142,12 @@ public:
 
 class OptimalGamer : public Gamer {
 	std::vector<int> palubs;
-	int cur_x = 3, cur_y = 0, cur_ship_x = 3, cur_ship_y = 0, ship_left = cur_x-1, ship_right = cur_x+1, ship_down = cur_y-1, ship_up = cur_y+1;
-	
+	int cur_x = 3, cur_y = 0, cur_ship_x = 3, cur_ship_y = 0, ship_left = cur_x - 1, ship_right = cur_x + 1, ship_down = cur_y - 1, ship_up = cur_y + 1;
+
 	std::list<std::list<int>> free_place(int field_orientation, int side, int pal) {
 		std::list<std::list<int>> free_cells;
 		int up, down, left, right;
-		if(field_orientation == Orientation::horizontal) {
+		if (field_orientation == Orientation::horizontal) {
 			up = 9;
 			down = 0;
 			if (side) {
@@ -173,9 +173,9 @@ class OptimalGamer : public Gamer {
 		}
 
 		std::list<int> place;
-		for (int i = left+1; i <= right; i++) {
+		for (int i = left + 1; i <= right; i++) {
 			for (int j = up + 1; j <= down; j++) {
-				if (!(can_set(i+1, j, 2, Orientation::horizontal, field))) {
+				if (!(can_set(i + 1, j, 2, Orientation::horizontal, field))) {
 					place.clear();
 					place.push_back(i);
 					place.push_back(j);
@@ -193,21 +193,21 @@ class OptimalGamer : public Gamer {
 		}
 		return free_cells;
 	}
-	
+
 	void next_turn(int pal, std::vector<std::vector<int>> &my_turns) {
 
 		int k = 0;
 		int h = std::max(ship_right - ship_left - 1, ship_up - ship_down - 1);
 		palubs[4 - std::max(ship_right - ship_left - 1, ship_up - ship_down - 1)]++;
 
-		if (std::max(ship_right - ship_left - 1, ship_up - ship_down -1) == pal) {	
-			while ((palubs.at(k) == k + 1)&&(k<4)) {
+		if (std::max(ship_right - ship_left - 1, ship_up - ship_down - 1) == pal) {
+			while ((palubs.at(k) == k + 1) && (k<4)) {
 				k++;
 				pal = 4 - k;
 			}
 			pal = 4 - k;
 
-			cur_x = pal-1;
+			cur_x = pal - 1;
 			cur_y = 0;
 			while (my_turns[cur_x][cur_y] != Hit::no) {
 				cur_y += (cur_x + pal) / 10;
@@ -219,22 +219,22 @@ class OptimalGamer : public Gamer {
 		}
 		else {
 			cur_y += (cur_x + pal) / 10;
-			if(pal!=1)
-			cur_x = (!((cur_x + pal) / 10))*(cur_x + pal) + ((cur_x + pal) / 10)*(pal-1 - cur_y%pal);
+			if (pal != 1)
+				cur_x = (!((cur_x + pal) / 10))*(cur_x + pal) + ((cur_x + pal) / 10)*(pal - 1 - cur_y % pal);
 			else
 				cur_x = (cur_x + 1) % 10;
 			while (my_turns[cur_x][cur_y] != Hit::no) {
 				cur_y += (cur_x + pal) / 10;
-				if(pal!=1)
-				cur_x = (!((cur_x + pal) / 10))*(cur_x + pal) + ((cur_x + pal) / 10)*(pal-1- cur_y%pal);
+				if (pal != 1)
+					cur_x = (!((cur_x + pal) / 10))*(cur_x + pal) + ((cur_x + pal) / 10)*(pal - 1 - cur_y % pal);
 				else
 					cur_x = (cur_x + 1) % 10;
 			}
 		}
 		cur_ship_x = cur_x;
 		cur_ship_y = cur_y;
-		ship_down = cur_ship_y -1;
-		ship_up = cur_ship_y+1;
+		ship_down = cur_ship_y - 1;
+		ship_up = cur_ship_y + 1;
 		ship_down = cur_ship_x - 1;
 		ship_right = cur_ship_x + 1;
 
@@ -247,191 +247,207 @@ public:
 		set_this.resize(4);
 
 		palubs.resize(4);
-		
-		while ((palubs.at(k) == k+1)&&(k<4)) {
+
+		while ((palubs.at(k) == k + 1) && (k<4)) {
 			k++;
 			pal = 4 - k;
 		}
 		pal = 4 - k;
-		
 
-	    if (my_turns[cur_ship_x][cur_ship_y] == Hit::killed) {
-				if (cur_ship_x != cur_x) {
-					if (cur_ship_y-1 >= 0)
-						my_turns[cur_ship_x][cur_ship_y-1] = 1;
-					if (cur_ship_y+1 <= 9)
-						my_turns[cur_ship_x][cur_ship_y+1] = 1;
-				}
-				if (cur_ship_y != cur_y) {
-					if (cur_ship_x-1 >= 0)
-						my_turns[cur_ship_x-1][cur_ship_y] = 1;
-					if (cur_ship_x+1 <= 9)
-						my_turns[cur_ship_x+1][cur_ship_y] = 1;
-				}
 
-				if ((cur_ship_x-1 >= 0) && (my_turns[cur_ship_x-1][cur_ship_y] == Hit::no))
-					cur_ship_x--;
-				else {
-					if (((cur_ship_x - 1 < 0) || (my_turns[cur_ship_x - 1][cur_ship_y] == Hit::touched))&&(cur_y == cur_ship_y)) {
-				
-							ship_left = cur_ship_x - 1;
-							if(cur_x+1<=9)
-							cur_ship_x = cur_x + 1;
+		if (my_turns[cur_ship_x][cur_ship_y] == Hit::killed) {
+			if (cur_ship_x != cur_x) {
+				if (cur_ship_y - 1 >= 0)
+					my_turns[cur_ship_x][cur_ship_y - 1] = 1;
+				if (cur_ship_y + 1 <= 9)
+					my_turns[cur_ship_x][cur_ship_y + 1] = 1;
+			}
+			if (cur_ship_y != cur_y) {
+				if (cur_ship_x - 1 >= 0)
+					my_turns[cur_ship_x - 1][cur_ship_y] = 1;
+				if (cur_ship_x + 1 <= 9)
+					my_turns[cur_ship_x + 1][cur_ship_y] = 1;
+			}
+
+			if ((cur_ship_x - 1 >= 0) && (my_turns[cur_ship_x - 1][cur_ship_y] == Hit::no))
+				cur_ship_x--;
+			else {
+				if (((cur_ship_x - 1 < 0) || (my_turns[cur_ship_x - 1][cur_ship_y] == Hit::touched)) && (cur_y == cur_ship_y)) {
+
+					ship_left = cur_ship_x - 1;
+					if (cur_x + 1 <= 9)
+						cur_ship_x = cur_x + 1;
+					else {
+						ship_right = 10;
+						cur_ship_x = cur_x;
+						if (cur_ship_y - 1 >= 0)
+							cur_ship_y--;
+						else {
+							ship_down = cur_y - 1;
+							if (cur_ship_y + 1 <= 9)
+								cur_ship_y++;
 							else {
-								ship_right = 10;
-								cur_ship_x = cur_x;
-								if (cur_ship_y - 1 >= 0)
-									cur_ship_y--;
+								ship_up = cur_ship_y + 1;
+								next_turn(pal, my_turns);
+							}
+						}
+					}
+				}
+				else {
+					if ((cur_ship_x + 1 <= 9) && (my_turns[cur_ship_x + 1][cur_ship_y] == Hit::no))
+						cur_ship_x++;
+					else {
+						if (((cur_ship_x + 1 > 9) || (my_turns[cur_ship_x + 1][cur_ship_y] == Hit::touched)) && (cur_ship_y == cur_y)) {
+
+							ship_right = cur_ship_x + 1;
+							cur_ship_x = cur_x;
+							if (cur_ship_y - 1 >= 0)
+								cur_ship_y--;
+							else {
+								ship_down = cur_y - 1;
+								if(cur_ship_y+1 <= 9)
+								 cur_ship_y++;
 								else {
-									ship_down = cur_y - 1;
-									if(cur_ship_y+1<=9)
-									cur_ship_y++;
+									ship_up = cur_ship_y + 1;
+									next_turn(pal, my_turns);
+								}
+							}
+						}
+						else {
+							if ((cur_ship_y - 1 >= 0) && (my_turns[cur_ship_x][cur_ship_y - 1] == Hit::no))
+								cur_ship_y--;
+							else {
+								if (((cur_ship_y - 1 < 0) || (my_turns[cur_ship_x][cur_ship_y - 1] == Hit::touched)) && (cur_x == cur_ship_x)) {
+									ship_down = cur_ship_y - 1;
+									if(cur_ship_y + 1 <= 9)
+									 cur_ship_y = cur_y + 1;
 									else {
 										ship_up = cur_ship_y + 1;
 										next_turn(pal, my_turns);
 									}
 								}
-							}				
-					}
-					else {
-						if ((cur_ship_x + 1 <= 9) && (my_turns[cur_ship_x + 1][cur_ship_y] == Hit::no))
-							cur_ship_x++;
-						else {
-							if (((cur_ship_x + 1 > 9) || (my_turns[cur_ship_x + 1][cur_ship_y] == Hit::touched))&&(cur_ship_y == cur_y)) {
-								
-								 ship_right = cur_ship_x+1;
-								cur_ship_x = cur_x;
-								if (cur_ship_y - 1 >= 0)
-									cur_ship_y--;
 								else {
-									ship_down = cur_y - 1;
-									cur_ship_y++;
-								}
-							}
-							else {
-								if ((cur_ship_y - 1 >= 0) && (my_turns[cur_ship_x][cur_ship_y - 1] == Hit::no))
-									cur_ship_y--;
-								else {
-									if (((cur_ship_y - 1 < 0) || (my_turns[cur_ship_x][cur_ship_y - 1] == Hit::touched))&&(cur_x == cur_ship_x)) {
-										ship_down = cur_ship_y - 1;
-										cur_ship_y = cur_y + 1;
-									}
+									if ((cur_ship_y + 1 <= 9) && (my_turns[cur_ship_x][cur_ship_y + 1] == Hit::no))
+										cur_ship_y++;
 									else {
-										if ((cur_ship_y + 1 <= 9) && (my_turns[cur_ship_x][cur_ship_y + 1] == Hit::no))
-											cur_ship_y++;
-										else {
-									
-											 ship_up = cur_ship_y+1;
-											next_turn(pal, my_turns);
-										}
+
+										ship_up = cur_ship_y + 1;
+										next_turn(pal, my_turns);
 									}
 								}
 							}
 						}
 					}
 				}
+			}
+		}
+		else {
+			if ((cur_x == cur_ship_x) && (cur_ship_y == cur_y)) {
+
+				if (my_turns[pal - 1][0] == 1) {
+					cur_y += (cur_x + pal) / 10;
+					if (pal != 1)
+						cur_x = (!((cur_x + pal) / 10))*(cur_x + pal) + ((cur_x + pal) / 10)*(pal - 1 - cur_y % pal);
+					else
+						cur_x = (cur_x + 1) % 10;
+				}
+
+				while (my_turns[cur_x][cur_y] != Hit::no) {
+					cur_y += (cur_x + pal) / 10;
+					if (pal != 1)
+						cur_x = (!((cur_x + pal) / 10))*(cur_x + pal) + ((cur_x + pal) / 10)*(pal - 1 - cur_y % pal);
+					else
+						cur_x = (cur_x + 1) % 10;
+				}
+				cur_ship_x = cur_x;
+				cur_ship_y = cur_y;
+				set_this[0] = cur_x;
+				set_this[1] = cur_y;
+				return set_this;
 			}
 			else {
-				if ((cur_x == cur_ship_x) && (cur_ship_y == cur_y)) {
-                    			
-					if (my_turns[pal - 1][0] == 1) {
-						cur_y += (cur_x + pal) / 10;
-						if(pal!=1)
-						cur_x = (!((cur_x + pal) / 10))*(cur_x + pal) + ((cur_x + pal) / 10)*(pal- 1 - cur_y%pal);
-						else
-							cur_x = (cur_x + 1) % 10;
+				if (cur_ship_x < cur_x) {
+					if (cur_ship_y - 1 >= 0)
+						my_turns[cur_ship_x][cur_ship_y - 1] = Hit::touched;
+					if (cur_ship_y + 1 <= 9)
+						my_turns[cur_ship_x][cur_ship_y + 1] = Hit::touched;
+
+					ship_left = cur_ship_x;
+					if (cur_x + 1 <= 9)
+						cur_ship_x = cur_x + 1;
+					else {
+						if (cur_ship_y - 1 >= 0) {
+							cur_ship_x = cur_x;
+							cur_ship_y--;
+						}
+						else {
+							cur_ship_x = cur_x;
+							cur_ship_y + 1;
+						}
 					}
-					
-					while (my_turns[cur_x][cur_y] != Hit::no) {
-						cur_y += (cur_x + pal) / 10;
-						if(pal != 1)
-						cur_x = (!((cur_x + pal) / 10))*(cur_x + pal) + ((cur_x + pal) / 10)*(pal- 1 - cur_y%pal);
-						else
-							cur_x = (cur_x + 1) % 10;
-					}
-					cur_ship_x = cur_x;
-					cur_ship_y = cur_y;
-					set_this[0] = cur_x;
-					set_this[1] = cur_y;
-					return set_this;
 				}
 				else {
-					if (cur_ship_x < cur_x) {
-						if (cur_ship_y-1 >= 0)
-							my_turns[cur_ship_x][cur_ship_y-1] = Hit::touched;
-						if (cur_ship_y+1 <= 9)
-							my_turns[cur_ship_x][cur_ship_y+1] = Hit::touched;
-				
-						ship_left = cur_ship_x;
-						if (cur_x+1 <= 9)
-							cur_ship_x = cur_x+1;
-						else {
-							if (cur_ship_y-1 >= 0) {
-								cur_ship_x = cur_x;
-								cur_ship_y--;
-							}
-							else {
+					if (cur_ship_x > cur_x) {
+						if (cur_ship_y - 1 >= 0)
+							my_turns[cur_ship_x][cur_ship_y - 1] = Hit::touched;
+						if (cur_ship_y + 1 <= 9)
+							my_turns[cur_ship_x][cur_ship_y + 1] = Hit::touched;
 
-								cur_ship_x = cur_x;
-								cur_ship_y+1;
+						ship_right = cur_ship_x;
+						cur_ship_x = cur_x;
+
+						if (cur_ship_y - 1 >= 0)
+							cur_ship_y--;
+						else {
+							ship_down = cur_y - 1;
+							if (cur_ship_y + 1 <= 9)
+								cur_ship_y++;
+							else {
+								ship_up = cur_ship_y + 1;
+								next_turn(pal, my_turns);
 							}
 						}
+
+						set_this[0] = cur_ship_x;
+						set_this[1] = cur_ship_y;
+						return set_this;
 					}
 					else {
-						if (cur_ship_x > cur_x) {
-							if (cur_ship_y-1 >= 0)
-								my_turns[cur_ship_x][cur_ship_y-1] = Hit::touched;
-							if (cur_ship_y+1 <= 9)
-								my_turns[cur_ship_x][cur_ship_y+1] = Hit::touched;
-			
-							ship_right = cur_ship_x;
-							cur_ship_x = cur_x;
+						if (cur_ship_y < cur_y) {
+							if (cur_ship_x - 1 >= 0)
+								my_turns[cur_ship_x - 1][cur_ship_y] = Hit::touched;
+							if (cur_ship_x + 1 <= 9)
+								my_turns[cur_ship_x + 1][cur_ship_y] = Hit::touched;
 
-							if (cur_ship_y - 1 >= 0)
-								cur_ship_y--;
-							else
-								cur_ship_y++;
-
-							set_this[0] = cur_ship_x;
-							set_this[1] = cur_ship_y;
-							return set_this;
+							ship_down = cur_ship_y;
+							if (cur_y + 1 <= 9)
+								cur_ship_y = cur_y + 1;
+							else {
+								ship_up = 10;
+								next_turn(pal, my_turns);
+							}
 						}
 						else {
-							if (cur_ship_y < cur_y) {
-								if (cur_ship_x-1 >= 0)
-									my_turns[cur_ship_x-1][cur_ship_y] = Hit::touched;
-								if (cur_ship_x+1 <= 9)
-									my_turns[cur_ship_x+1][cur_ship_y] = Hit::touched;
-		
-								ship_down = cur_ship_y;
-								if (cur_y+1 <= 9)
-									cur_ship_y = cur_y+1;
-								else {
-									ship_up = 10;
-									next_turn(pal, my_turns);
-									}
-							}
-							else {
 
-								if (cur_ship_x-1 >= 0)
-									my_turns[cur_ship_x-1][cur_ship_y] = Hit::touched;
-								if (cur_ship_x+1 <= 9)
-									my_turns[cur_ship_x+1][cur_ship_y] = Hit::touched;
-				
-								ship_up = cur_ship_y;
-								next_turn(pal, my_turns);
+							if (cur_ship_x - 1 >= 0)
+								my_turns[cur_ship_x - 1][cur_ship_y] = Hit::touched;
+							if (cur_ship_x + 1 <= 9)
+								my_turns[cur_ship_x + 1][cur_ship_y] = Hit::touched;
 
-							}
+							ship_up = cur_ship_y;
+							next_turn(pal, my_turns);
 
 						}
 
 					}
+
 				}
 			}
+		}
 
-			set_this[0] = cur_ship_x;
-			set_this[1] = cur_ship_y;
-			return set_this;
+		set_this[0] = cur_ship_x;
+		set_this[1] = cur_ship_y;
+		return set_this;
 	}
 
 	int mistake(int x, int y) {
@@ -451,7 +467,7 @@ public:
 				while (res) {
 					side = rand() % 2;
 					orientation = rand() % 2;
-		
+
 					if (orientation == Orientation::horizontal) {
 						x_right = rand() % 10;
 						x_left = x_right - pal + 1;
@@ -467,7 +483,7 @@ public:
 					else {
 						y_down = rand() % 10;
 						y_up = y_down + pal - 1;
-						if (side) { 
+						if (side) {
 							x_right = 9;
 							x_left = 9;
 						}
@@ -514,7 +530,7 @@ public:
 			}
 			else {
 				int res = 1;
-				while ((res)||(x-1<0)||(x>9)||(y<0)||(y+1>9)) {
+				while ((res) || (x - 1<0) || (x>9) || (y<0) || (y + 1>9)) {
 					x = rand() % 10;
 					y = rand() % 10;
 					ship_orientation = rand() % 2;
@@ -540,7 +556,7 @@ public:
 				x = rand() % 10;
 				y = rand() % 10;
 			}
-				field[x][y] = 1;
+			field[x][y] = 1;
 		}
 
 	}
