@@ -4,6 +4,7 @@
 #include<tuple>
 #include<fstream>
 #include<conio.h>
+
 	template<class Ch, class Tr, const int ind, class... Args>
 	struct _iteration {
 		static void next_val(std::basic_ostream<Ch, Tr>& os, std::tuple<Args...>const& tp) {
@@ -37,5 +38,5 @@
     		return &os;
 		}
 	
-
+		
 #endif

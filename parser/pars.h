@@ -12,30 +12,31 @@ class Proxy;
 
 template<const int cur, class... Args >
 struct iter {
-	static void next(std::tuple<Args...>const& tp, std::stringstream& stream_line, char _space) {
-		  iter<cur - 1, Args...>::next(tp, stream_line, _space);
+	 void next(std::tuple<Args...>const& tp, std::stringstream& stream_line, char _space) {
+		 iter<cur - 1, Args...> _iter;
+		 _iter.next(tp, stream_line, _space);
 		  std::string _word;
 		  std::stringstream word;
 		  std::getline(stream_line, _word, _space);
-		  word << _word;
-		  std::get<cur>(tp) << word;
+		  word.str(_word);
+		  word >> std::get<cur>(tp);
 	}
 };
 
 template<class... Args>
 struct iter<0, Args...> {
-	static void next(std::tuple<Args...>const& tp, std::stringstream& stream_line, char _space) {
+	 void next(std::tuple<Args...>const& tp, std::stringstream& stream_line, char _space) {
 		std::string _word;
 		std::stringstream word;
 		std::getline(stream_line, _word, _space);
-		word << _word;
-		std::get<0>(tp) << word;
+		word.str(_word);
+		word >> std::get<0>(tp);
 	}
 };
 
 template<class... Args>
 struct iter<-1, Args...> {
-	static void next(std::tuple<Args...>const& tp, std::stringstream& stream_line) {}
+	 void next(std::tuple<Args...>const& tp, std::stringstream& stream_line, char _space) {}
 };
 
 
@@ -52,19 +53,8 @@ class CSVParser {
 		stream_line << line;
 		std::tuple<Args...> _tuple;
 		const int _size = sizeof...(Args);
-		iter<_size-1, Args...>::next(_tuple, stream_line, _space);
-	}
-
-	std::string string_interpretation(std::ifstream &in) {
-		char ch;
-		std::string line;
-		while (((ch = in.get()) != '\n') && (ch != EOF)) {
-		if (ch == _space)
-			line = line + " ";
-		else
-			line = line + ch;
-		}
-		return line;
+		iter<_size - 1, Args...> _iter;
+		_iter.next(_tuple, stream_line, _space);
 	}
 
 public:
@@ -92,7 +82,6 @@ public:
 		void operator++() {
 			(p->count)++;
 			std::string line;
-			//line = p->string_interpretation(os_copy);
 			std::getline(os_copy, line);
 			std::tuple<Args...> _tuple;
 			_tuple = p->make_tuple_str(line);
@@ -121,7 +110,6 @@ public:
 		count = 1;
 
 		std::string line;
-		//line = string_interpretation(os);
 		std::getline(os, line);
 		os.seekg(0, os.beg);
 		std::tuple<Args...> _tuple;
@@ -142,18 +130,5 @@ public:
 
 	~CSVParser() {}
 };
-/*
-template<class... Args>
-bool operator!=(CSVParser<Args...>::Proxy &one, CSVParser<Args...>::Proxy &two) {
-	
-	if ((two.p->count != one.p->count) && (one.p->count != -1) && (two.p->count != -1))
-		return 1;
-	for (int i = 0; i < one._size; i++) {
-		if (std::get<i>(one.collection_el) != std::get<i>(two.collection_el))
-			return 1;
-	}
-	return 0;
-}
-*/
 
 #endif PARSER_H
