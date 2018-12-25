@@ -1,3 +1,0 @@
-3.14, first
-4.12 , second
-5.12 ,third and last
