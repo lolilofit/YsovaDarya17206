@@ -11,8 +11,8 @@ int main() {
 	//std::ifstream in;
 	in.open("in.txt");
 	//const char ch = ' ';
-	CSVParser<int, std::string> _parser(in, ',', 0);
+	CSVParser<double, std::string> _parser(in, ',', 0);
 	for (auto ptr = _parser.begin(); ptr != (_parser.end()); ++ptr) 
-		std::cout << *ptr;
+		std::cout << *ptr<<std::endl;
 	return 0;
 }

@@ -126,9 +126,6 @@
     <ClInclude Include="resource.h" />
     <ClInclude Include="temp.h" />
   </ItemGroup>
-  <ItemGroup>
-    <Text Include="in.txt" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
