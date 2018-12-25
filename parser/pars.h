@@ -117,10 +117,9 @@ public:
 
 		bool operator!=(Proxy two) {
 			int _size = sizeof...(Args);
-			if (count == -1) {
-				//os.seekg(0, os.beg);
+			if (count == -1) 
 				return 0;
-			}
+
 			if (two.count != count) 
 				return 1;
 			if (this->collection_el != two.collection_el)
@@ -160,7 +159,7 @@ public:
 		std::string line;
 		std::tuple<Args...> _tuple;
 		Proxy _end(_tuple, this->os, this, -1);
-	//	os.seekg(0, os.beg);
+	
 		return _end;
 	}
 
